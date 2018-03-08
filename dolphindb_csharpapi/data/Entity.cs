@@ -22,27 +22,6 @@
         bool isDictionary();
         bool isChart();
         bool isChunk();
-
-//JAVA TO C# CONVERTER TODO TASK: There is no equivalent in C# to Java static interface methods:
-//		static Entity_DATA_CATEGORY typeToCategory(Entity_DATA_TYPE type)
-	//	{
-	//		if(type == Entity.DATA_TYPE.DT_TIME || type == Entity.DATA_TYPE.DT_SECOND || type== Entity.DATA_TYPE.DT_MINUTE || type == Entity.DATA_TYPE.DT_DATE || type == Entity.DATA_TYPE.DT_DATETIME || type == Entity.DATA_TYPE.DT_MONTH || type == Entity.DATA_TYPE.DT_TIMESTAMP || type == DATA_TYPE.DT_NANOTIME || type == DATA_TYPE.DT_NANOTIMESTAMP)
-	//			return Entity.DATA_CATEGORY.TEMPORAL;
-	//		else if(type == Entity.DATA_TYPE.DT_INT || type == Entity.DATA_TYPE.DT_LONG || type == Entity.DATA_TYPE.DT_SHORT || type == Entity.DATA_TYPE.DT_BYTE)
-	//			return Entity.DATA_CATEGORY.INTEGRAL;
-	//		else if(type == Entity.DATA_TYPE.DT_BOOL)
-	//			return Entity.DATA_CATEGORY.LOGICAL;
-	//		else if(type == Entity.DATA_TYPE.DT_DOUBLE || type == Entity.DATA_TYPE.DT_FLOAT)
-	//			return Entity.DATA_CATEGORY.FLOATING;
-	//		else if(type == Entity.DATA_TYPE.DT_STRING || type == Entity.DATA_TYPE.DT_SYMBOL)
-	//			return Entity.DATA_CATEGORY.LITERAL;
-	//		else if(type == Entity.DATA_TYPE.DT_ANY)
-	//			return Entity.DATA_CATEGORY.MIXED;
-	//		else if(type == Entity.DATA_TYPE.DT_VOID)
-	//			return Entity.DATA_CATEGORY.NOTHING;
-	//		else
-	//			return Entity.DATA_CATEGORY.SYSTEM;
-	//	}
 	}
 
 	public enum DATA_TYPE

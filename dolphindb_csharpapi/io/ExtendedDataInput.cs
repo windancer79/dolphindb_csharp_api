@@ -10,6 +10,8 @@ namespace com.xxdb.io
 
         byte readByte();
 
+        int readInt();
+
         char readChar();
 
         double readDouble();
@@ -26,9 +28,10 @@ namespace com.xxdb.io
 
         short readShort();
 
-        string readUTF();
         int readUnsignedByte();
 
         int skipBytes(int n);
+
+
     }
 }

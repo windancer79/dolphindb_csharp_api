@@ -1,4 +1,5 @@
-﻿using System;
+﻿using com.xxdb.jobjects;
+using System;
 
 namespace com.xxdb.data
 {
@@ -9,63 +10,43 @@ namespace com.xxdb.data
 	public class Void : AbstractScalar
 	{
 
-		public override bool Null
+		public bool isNull()
 		{
-			get
-			{
 				return true;
-			}
 		}
 
-		public override void setNull()
+		public void setNull()
 		{
 		}
 
-		public override DATA_CATEGORY DataCategory
+		public DATA_CATEGORY getDataCategory()
 		{
-			get
-			{
-				return DATA_CATEGORY.NOTHING;
-			}
+			return DATA_CATEGORY.NOTHING;
 		}
 
-		public override DATA_TYPE DataType
+		public DATA_TYPE getDataType()
 		{
-			get
-			{
-				return DATA_TYPE.DT_VOID;
-			}
+			return DATA_TYPE.DT_VOID;
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: public Number getNumber() throws Exception
-		public override Number Number
-		{
-			get
-			{
+
+		public  Number getNumber()
+        {
 				throw new Exception("Imcompatible data type");
-			}
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: @Override public java.time.temporal.Temporal getTemporal() throws Exception
-		public override Temporal Temporal
-		{
-			get
-			{
+ 
+		public  Temporal getTemporal()
+        {
 				throw new Exception("Imcompatible data type");
-			}
 		}
 
-		public override string String
+		public  string getString()
 		{
-			get
-			{
 				return "";
-			}
 		}
 
-		public override bool Equals(object o)
+		public bool Equals(object o)
 		{
 			if (!(o is Void) || o == null)
 			{
@@ -77,14 +58,13 @@ namespace com.xxdb.data
 			}
 		}
 
-		public override int GetHashCode()
+		public int GetHashCode()
 		{
 			return 0;
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: protected void writeScalarToOutputStream(com.xxdb.io.ExtendedDataOutput out) throws java.io.IOException
-		protected internal override void WriteScalarToOutputStream(ExtendedDataOutput @out)
+
+		protected internal void WriteScalarToOutputStream(ExtendedDataOutput @out)
 		{
 			@out.writeBoolean(true); //explicit null value
 		}

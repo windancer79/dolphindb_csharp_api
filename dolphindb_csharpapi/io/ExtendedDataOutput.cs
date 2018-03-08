@@ -6,7 +6,8 @@
 	{
 
 		void writeString(string str);
-		void writeShortArray(short[] A);
+        void flush();
+        void writeShortArray(short[] A);
 		void writeShortArray(short[] A, int startIdx, int len);
 		void writeIntArray(int[] A);
 		void writeIntArray(int[] A, int startIdx, int len);
@@ -26,5 +27,6 @@
         void writeBytes(string s);
         void writeChars(string s);
         void writeUTF(string value);
-	}
+        void writeInt(int value);
+    }
 }

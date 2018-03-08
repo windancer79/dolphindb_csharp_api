@@ -9,9 +9,38 @@
 	{
         public bool Null => throw new NotImplementedException();
 
-        public abstract void write(ExtendedDataOutput output);
+        public override DATA_FORM getDataForm()
+        {
+            return DATA_FORM.DF_SCALAR;
+        }
 
-        public DATA_FORM getDataForm()
+        public void write(ExtendedDataOutput output)
+        {
+            //int flag = ((int)DATA_FORM.DF_SCALAR << 8) + getDataType().ordinal();
+            //output.writeShort(flag);
+            //writeScalarToOutputStream(output);
+        }
+        public int rows()
+        {
+            return 1;
+        }
+
+        public int columns()
+        {
+            return 1;
+        }
+
+        public void setNull()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Number getNumber()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Temporal getTemporal()
         {
             throw new NotImplementedException();
         }
@@ -31,7 +60,7 @@
             throw new NotImplementedException();
         }
 
-        public bool isScalar()
+        bool Entity.isScalar()
         {
             throw new NotImplementedException();
         }
@@ -67,31 +96,6 @@
         }
 
         public bool isChunk()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void setNull()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Number getNumber()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Temporal getTemporal()
-        {
-            throw new NotImplementedException();
-        }
-
-        public int rows()
-        {
-            throw new NotImplementedException();
-        }
-
-        public int columns()
         {
             throw new NotImplementedException();
         }

@@ -1,12 +1,8 @@
-﻿using System;
-
+﻿using com.xxdb.jobjects;
+using System;
+using com.xxdb.io;
 namespace com.xxdb.data
 {
-
-
-	using ExtendedDataInput = com.xxdb.io.ExtendedDataInput;
-	using ExtendedDataOutput = com.xxdb.io.ExtendedDataOutput;
-
 	/// 
 	/// <summary>
 	/// Corresponds to DolphinDB int scalar
@@ -22,8 +18,6 @@ namespace com.xxdb.data
 			this.value = value;
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: public BasicInt(com.xxdb.io.ExtendedDataInput in) throws java.io.IOException
 		public BasicInt(ExtendedDataInput @in)
 		{
 			value = @in.readInt();
@@ -37,7 +31,7 @@ namespace com.xxdb.data
 			}
 		}
 
-		public override bool Null
+		public bool isNull
 		{
 			get
 			{
@@ -45,12 +39,12 @@ namespace com.xxdb.data
 			}
 		}
 
-		public override void setNull()
+		public void setNull()
 		{
 			value = int.MinValue;
 		}
 
-		public override DATA_CATEGORY DataCategory
+		public  DATA_CATEGORY DataCategory
 		{
 			get
 			{
@@ -58,54 +52,28 @@ namespace com.xxdb.data
 			}
 		}
 
-		public override DATA_TYPE DataType
+		public  DATA_TYPE DataType
 		{
 			get
 			{
 				return DATA_TYPE.DT_INT;
 			}
 		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: public Number getNumber() throws Exception
-		public override Number Number
+		public int getNumber()
 		{
-			get
-			{
-				if (Null)
+				if (isNull)
 				{
-					return null;
+					return int.MinValue;
 				}
 				else
 				{
-					return new int?(value);
+					return value;
 				}
-			}
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: @Override public java.time.temporal.Temporal getTemporal() throws Exception
-		public override Temporal Temporal
+		public Temporal getTemporal()
 		{
-			get
-			{
-				throw new Exception("Imcompatible data type");
-			}
-		}
-
-		public override string String
-		{
-			get
-			{
-				if (Null)
-				{
-					return "";
-				}
-				else
-				{
-					return value.ToString();
-				}
-			}
+			throw new Exception("Imcompatible data type");
 		}
 
 		public override bool Equals(object o)
@@ -125,16 +93,14 @@ namespace com.xxdb.data
 			return (new int?(value)).GetHashCode();
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: protected void writeScalarToOutputStream(com.xxdb.io.ExtendedDataOutput out) throws java.io.IOException
-		protected internal override void WriteScalarToOutputStream(ExtendedDataOutput @out)
+		protected internal void WriteScalarToOutputStream(ExtendedDataOutput @out)
 		{
 			@out.writeInt(value);
 		}
 
-		public virtual int CompareTo(BasicInt o)
+		public int CompareTo(BasicInt o)
 		{
-			return Integer.compare(value, o.value);
+			return value.CompareTo(o.value);
 		}
 	}
 

@@ -31,7 +31,7 @@ namespace com.xxdb.data
 		{
 		}
 
-		public virtual void setTime(int row, int column, LocalTime value)
+		public virtual void setTime(int row, int column, DateTime value)
 		{
 			setInt(row, column, Utils.countMilliseconds(value));
 		}

@@ -39,7 +39,7 @@ namespace com.xxdb.data
 //ORIGINAL LINE: protected AbstractMatrix(com.xxdb.io.ExtendedDataInput in) throws java.io.IOException
 		protected internal AbstractMatrix(ExtendedDataInput @in)
 		{
-			sbyte hasLabels = @in.readByte();
+			byte hasLabels = @in.readByte();
 
 			BasicEntityFactory factory = null;
 			DATA_TYPE[] types = Enum.GetValues(typeof(DATA_TYPE));
@@ -177,7 +177,7 @@ namespace com.xxdb.data
 					maxColWidth = 0;
 					for (i = 0;i < rows;i++)
 					{
-						listTmp[i + 1] = rowLabels.get(i).String;
+						listTmp[i + 1] = rowLabels.get(i).getString();
 						if (listTmp[i + 1].Length > maxColWidth)
 						{
 							maxColWidth = listTmp[i + 1].Length;
@@ -216,7 +216,7 @@ namespace com.xxdb.data
 					maxColWidth = 0;
 					for (i = 0;i < rows;i++)
 					{
-						listTmp[i + 1] = get(i, curCol).String;
+						listTmp[i + 1] = get(i, curCol).getString();
 						if (listTmp[i + 1].Length > maxColWidth)
 						{
 							maxColWidth = listTmp[i + 1].Length;

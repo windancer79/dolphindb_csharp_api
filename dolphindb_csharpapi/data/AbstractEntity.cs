@@ -3,66 +3,66 @@
 
 	public abstract class AbstractEntity
 	{
-		public abstract DATA_FORM DataForm {get;}
+        public abstract DATA_FORM getDataForm();
 
-		public virtual bool Scalar
+		public bool isScalar
 		{
 			get
 			{
-				return DataForm == DATA_FORM.DF_SCALAR;
+				return getDataForm() == DATA_FORM.DF_SCALAR;
 			}
 		}
 		public virtual bool Vector
 		{
 			get
 			{
-				return DataForm == DATA_FORM.DF_VECTOR;
+				return getDataForm() == DATA_FORM.DF_VECTOR;
 			}
 		}
 		public virtual bool Pair
 		{
 			get
 			{
-				return DataForm == DATA_FORM.DF_PAIR;
+				return getDataForm() == DATA_FORM.DF_PAIR;
 			}
 		}
 		public virtual bool Table
 		{
 			get
 			{
-				return DataForm == DATA_FORM.DF_TABLE;
+				return getDataForm() == DATA_FORM.DF_TABLE;
 			}
 		}
 		public virtual bool Matrix
 		{
 			get
 			{
-				return DataForm == DATA_FORM.DF_MATRIX;
+				return getDataForm() == DATA_FORM.DF_MATRIX;
 			}
 		}
 		public virtual bool Dictionary
 		{
 			get
 			{
-				return DataForm == DATA_FORM.DF_DICTIONARY;
+				return getDataForm() == DATA_FORM.DF_DICTIONARY;
 			}
 		}
 		public virtual bool Chart
 		{
 			get
 			{
-				return DataForm == DATA_FORM.DF_CHART;
+				return getDataForm() == DATA_FORM.DF_CHART;
 			}
 		}
 		public virtual bool Chunk
 		{
 			get
 			{
-				return DataForm == DATA_FORM.DF_CHUNK;
+				return getDataForm() == DATA_FORM.DF_CHUNK;
 			}
 		}
 
-		protected internal virtual DATA_CATEGORY getDataCategory(DATA_TYPE valueType)
+		protected internal DATA_CATEGORY getDataCategory(DATA_TYPE valueType)
 		{
 			if (valueType == DATA_TYPE.DT_BOOL)
 			{

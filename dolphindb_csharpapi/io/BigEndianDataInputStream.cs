@@ -7,20 +7,19 @@ namespace com.xxdb.io
 	public class BigEndianDataInputStream : AbstractExtendedDataInputStream
 	{
 
-		public BigEndianDataInputStream(System.IO.Stream @in) : base(@in)
+		public BigEndianDataInputStream(Stream @in) : base(@in)
 		{
+
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: @Override public int readInt() throws java.io.IOException
-		public int readInt()
+		public override int readInt()
 		{
             try
             {
-                sbyte b1 = readAndCheckByte();
-                sbyte b2 = readAndCheckByte();
-                sbyte b3 = readAndCheckByte();
-                sbyte b4 = readAndCheckByte();
+                byte b1 = readAndCheckByte();
+                byte b2 = readAndCheckByte();
+                byte b3 = readAndCheckByte();
+                byte b4 = readAndCheckByte();
                 return fromBytes(b1, b2, b3, b4);
             }
             catch(IOException ex)
@@ -30,20 +29,18 @@ namespace com.xxdb.io
 
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: @Override public long readLong() throws java.io.IOException
 		public long readLong()
 		{
             try
             {
-                sbyte b1 = readAndCheckByte();
-                sbyte b2 = readAndCheckByte();
-                sbyte b3 = readAndCheckByte();
-                sbyte b4 = readAndCheckByte();
-                sbyte b5 = readAndCheckByte();
-                sbyte b6 = readAndCheckByte();
-                sbyte b7 = readAndCheckByte();
-                sbyte b8 = readAndCheckByte();
+                byte b1 = readAndCheckByte();
+                byte b2 = readAndCheckByte();
+                byte b3 = readAndCheckByte();
+                byte b4 = readAndCheckByte();
+                byte b5 = readAndCheckByte();
+                byte b6 = readAndCheckByte();
+                byte b7 = readAndCheckByte();
+                byte b8 = readAndCheckByte();
                 return fromBytes(b1, b2, b3, b4, b5, b6, b7, b8);
             }
             catch (IOException ex)
@@ -52,15 +49,13 @@ namespace com.xxdb.io
             }
         }
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: @Override public int readUnsignedShort() throws java.io.IOException
 		public int readUnsignedShort()
 		{
             try
             {
-                sbyte b1 = readAndCheckByte();
-                sbyte b2 = readAndCheckByte();
-                return fromBytes(b1, b2, (sbyte)0, (sbyte)0);
+                byte b1 = readAndCheckByte();
+                byte b2 = readAndCheckByte();
+                return fromBytes(b1, b2, (byte)0, (byte)0);
             }
             catch (IOException ex)
             {

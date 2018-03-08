@@ -125,8 +125,6 @@ namespace com.xxdb.data
 			return (new long?(value)).GetHashCode();
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: protected void writeScalarToOutputStream(com.xxdb.io.ExtendedDataOutput out) throws java.io.IOException
 		protected internal override void WriteScalarToOutputStream(ExtendedDataOutput @out)
 		{
 			@out.writeLong(value);
