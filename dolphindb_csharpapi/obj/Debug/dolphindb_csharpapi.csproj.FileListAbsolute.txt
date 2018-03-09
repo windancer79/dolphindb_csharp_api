@@ -1,5 +1,4 @@
 D:\Work\Dophin\dolphindb_csharpapi\dolphindb_csharpapi\obj\Debug\dolphindb_csharpapi.csprojResolveAssemblyReference.cache
-F:\Source\dolphindb_csharpapi\dolphindb_csharp_api\dolphindb_csharpapi\obj\Debug\dolphindb_csharpapi.csprojResolveAssemblyReference.cache
 F:\Source\dolphindb_csharpapi\dolphindb_csharp_api\dolphindb_csharpapi\bin\Debug\dolphindb_csharpapi.dll
 F:\Source\dolphindb_csharpapi\dolphindb_csharp_api\dolphindb_csharpapi\bin\Debug\dolphindb_csharpapi.pdb
 F:\Source\dolphindb_csharpapi\dolphindb_csharp_api\dolphindb_csharpapi\obj\Debug\dolphindb_csharpapi.dll

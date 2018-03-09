@@ -6,13 +6,13 @@ namespace com.xxdb.io
 {
 
 
-	public abstract class AbstractExtendedDataInputStream : ExtendedDataInput
+	public abstract class AbstractExtendedDataInputStream : StreamReader,ExtendedDataInput
 	{
 
 		private const int UTF8_STRING_LIMIT = 65536;
 		private byte[] buf_;
         protected Stream _inStream;
-		protected internal AbstractExtendedDataInputStream(Stream inStream)
+		protected internal AbstractExtendedDataInputStream(Stream inStream):base(inStream)
 		{
             _inStream = inStream;
 
@@ -115,7 +115,7 @@ namespace com.xxdb.io
 
         string ExtendedDataInput.readLine()
         {
-            return readUTF8((byte)'\n');
+            return base.ReadLine();
         }
 
         string ExtendedDataInput.readString()

@@ -15,10 +15,6 @@ namespace com.xxdb.data
 				return true;
 		}
 
-		public void setNull()
-		{
-		}
-
 		public DATA_CATEGORY getDataCategory()
 		{
 			return DATA_CATEGORY.NOTHING;
@@ -29,24 +25,12 @@ namespace com.xxdb.data
 			return DATA_TYPE.DT_VOID;
 		}
 
-
-		public  Number getNumber()
-        {
-				throw new Exception("Imcompatible data type");
-		}
-
- 
-		public  Temporal getTemporal()
-        {
-				throw new Exception("Imcompatible data type");
-		}
-
-		public  string getString()
+        public string getString()
 		{
 				return "";
 		}
 
-		public bool Equals(object o)
+		public override bool Equals(object o)
 		{
 			if (!(o is Void) || o == null)
 			{
@@ -58,7 +42,7 @@ namespace com.xxdb.data
 			}
 		}
 
-		public int GetHashCode()
+		public override int GetHashCode()
 		{
 			return 0;
 		}

@@ -6,7 +6,7 @@ namespace com.xxdb.io
 {
 
 
-	public abstract class AbstractExtendedDataOutputStream : ExtendedDataOutput
+	public abstract class AbstractExtendedDataOutputStream : StreamWriter,ExtendedDataOutput
 	{
 		public abstract void writeLongArray(long[] A, int startIdx, int len);
 		public abstract void writeIntArray(int[] A, int startIdx, int len);
@@ -19,7 +19,7 @@ namespace com.xxdb.io
 		private int[] intBuf;
 		private long[] longBuf;
         protected Stream _outStream;
-        public AbstractExtendedDataOutputStream(Stream outStream)
+        public AbstractExtendedDataOutputStream(Stream outStream):base(outStream)
 		{
             _outStream = outStream;
         }
@@ -28,7 +28,7 @@ namespace com.xxdb.io
 		{
             try
             {
-                _outStream.Flush();
+                base.Flush();
             }
             catch (IOException ex)
             {
@@ -81,8 +81,7 @@ namespace com.xxdb.io
 		{
             try
             {
-                byte[] b = BitConverter.GetBytes(v);
-                _outStream.Write(b, 0, b.Length);
+                base.Write(v);
             }
             catch (IOException ex)
             {
@@ -135,8 +134,7 @@ namespace com.xxdb.io
 		{
             try
             {
-                byte[] b = Encoding.Default.GetBytes(s);
-                _outStream.Write(b, 0, b.Length);
+                base.Write(s);
             }
             catch (IOException ex)
             {
