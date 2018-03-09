@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace com.xxdb.io
+namespace dolphindb.io
 {
 
 
@@ -16,10 +16,10 @@ namespace com.xxdb.io
 		{
             try
             {
-                byte b1 = readAndCheckByte();
-                byte b2 = readAndCheckByte();
-                byte b3 = readAndCheckByte();
-                byte b4 = readAndCheckByte();
+                sbyte b1 = readAndCheckByte();
+                sbyte b2 = readAndCheckByte();
+                sbyte b3 = readAndCheckByte();
+                sbyte b4 = readAndCheckByte();
                 return fromBytes(b1, b2, b3, b4);
             }
             catch(IOException ex)
@@ -29,18 +29,18 @@ namespace com.xxdb.io
 
 		}
 
-		public long readLong()
+		public override long readLong()
 		{
             try
             {
-                byte b1 = readAndCheckByte();
-                byte b2 = readAndCheckByte();
-                byte b3 = readAndCheckByte();
-                byte b4 = readAndCheckByte();
-                byte b5 = readAndCheckByte();
-                byte b6 = readAndCheckByte();
-                byte b7 = readAndCheckByte();
-                byte b8 = readAndCheckByte();
+                sbyte b1 = readAndCheckByte();
+                sbyte b2 = readAndCheckByte();
+                sbyte b3 = readAndCheckByte();
+                sbyte b4 = readAndCheckByte();
+                sbyte b5 = readAndCheckByte();
+                sbyte b6 = readAndCheckByte();
+                sbyte b7 = readAndCheckByte();
+                sbyte b8 = readAndCheckByte();
                 return fromBytes(b1, b2, b3, b4, b5, b6, b7, b8);
             }
             catch (IOException ex)
@@ -49,13 +49,13 @@ namespace com.xxdb.io
             }
         }
 
-		public int readUnsignedShort()
+		public override int readUnsignedShort()
 		{
             try
             {
-                byte b1 = readAndCheckByte();
-                byte b2 = readAndCheckByte();
-                return fromBytes(b1, b2, (byte)0, (byte)0);
+                sbyte b1 = readAndCheckByte();
+                sbyte b2 = readAndCheckByte();
+                return fromBytes(b1, b2, (sbyte)0, (sbyte)0);
             }
             catch (IOException ex)
             {

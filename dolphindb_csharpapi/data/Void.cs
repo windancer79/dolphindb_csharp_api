@@ -1,31 +1,26 @@
-﻿using com.xxdb.jobjects;
-using System;
+﻿using dolphindb.io;
 
-namespace com.xxdb.data
+namespace dolphindb.data
 {
-
-
-	using ExtendedDataOutput = com.xxdb.io.ExtendedDataOutput;
-
-	public class Void : AbstractScalar
+    public class Void : AbstractScalar
 	{
 
-		public bool isNull()
+		public override bool isNull()
 		{
 				return true;
 		}
 
-		public DATA_CATEGORY getDataCategory()
+		public override DATA_CATEGORY getDataCategory()
 		{
 			return DATA_CATEGORY.NOTHING;
 		}
 
-		public DATA_TYPE getDataType()
+		public override DATA_TYPE getDataType()
 		{
 			return DATA_TYPE.DT_VOID;
 		}
 
-        public string getString()
+        public override string getString()
 		{
 				return "";
 		}
@@ -48,7 +43,7 @@ namespace com.xxdb.data
 		}
 
 
-		protected internal void WriteScalarToOutputStream(ExtendedDataOutput @out)
+		protected override void writeScalarToOutputStream(ExtendedDataOutput @out)
 		{
 			@out.writeBoolean(true); //explicit null value
 		}

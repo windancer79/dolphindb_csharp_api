@@ -1,10 +1,8 @@
-﻿namespace com.xxdb.data
+﻿using dolphindb.io;
+
+namespace dolphindb.data
 {
-
-	using ExtendedDataOutput = com.xxdb.io.ExtendedDataOutput;
-
-
-	public interface Entity
+	public interface IEntity
 	{
         DATA_FORM getDataForm();
         DATA_CATEGORY getDataCategory();

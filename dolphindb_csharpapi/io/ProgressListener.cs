@@ -1,4 +1,4 @@
-﻿namespace com.xxdb.io
+﻿namespace dolphindb.io
 {
 
 	public interface ProgressListener

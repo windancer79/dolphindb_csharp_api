@@ -1,53 +1,43 @@
-﻿using com.xxdb.data;
-using com.xxdb.io;
+﻿//-------------------------------------------------------------------------------------------
+//	Copyright © 2018 DolphinDB Inc.
+//	Date   : 2018.03.09
+//  Author : liang.lin
+//-------------------------------------------------------------------------------------------
+using dolphindb.data;
+using dolphindb.io;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 
-namespace com.xxdb
+namespace dolphindb
 {
 
+    /// <summary>
+    /// Sets up a connection to DolphinDB server through TCP/IP protocol
+    /// Executes DolphinDB scripts
+    /// 
+    /// Example:
+    /// 
+    /// import dolphindb;
+    /// DBConnection conn = new DBConnection();
+    /// boolean success = conn.connect("localhost", 8080);
+    /// conn.run("sum(1..100)");
+    /// 
+    /// </summary>
 
-	using BasicEntityFactory = com.xxdb.data.BasicEntityFactory;
-	using Entity = com.xxdb.data.Entity;
-	using EntityFactory = com.xxdb.data.EntityFactory;
-	using Void = com.xxdb.data.Void;
-	using AbstractExtendedDataOutputStream = com.xxdb.io.AbstractExtendedDataOutputStream;
-	using BigEndianDataInputStream = com.xxdb.io.BigEndianDataInputStream;
-	using BigEndianDataOutputStream = com.xxdb.io.BigEndianDataOutputStream;
-	using ExtendedDataInput = com.xxdb.io.ExtendedDataInput;
-	using ExtendedDataOutput = com.xxdb.io.ExtendedDataOutput;
-	using LittleEndianDataInputStream = com.xxdb.io.LittleEndianDataInputStream;
-	using LittleEndianDataOutputStream = com.xxdb.io.LittleEndianDataOutputStream;
-	using ProgressListener = com.xxdb.io.ProgressListener;
-
-	/// <summary>
-	/// Sets up a connection to DolphinDB server through TCP/IP protocol
-	/// Executes DolphinDB scripts
-	/// 
-	/// Example:
-	/// 
-	/// import com.xxdb;
-	/// DBConnection conn = new DBConnection();
-	/// boolean success = conn.connect("localhost", 8080);
-	/// conn.run("sum(1..100)");
-	/// 
-	/// </summary>
-
-	public class DBConnection
+    public class DBConnection
 	{
-		private static readonly int MAX_FORM_VALUE = Enum.GetValues(typeof(com.xxdb.data.DATA_FORM)).Length - 1;
-		private static readonly int MAX_TYPE_VALUE = Enum.GetValues(typeof(com.xxdb.data.DATA_TYPE)).Length - 1;
+		private static readonly int MAX_FORM_VALUE = Enum.GetValues(typeof(DATA_FORM)).Length - 1;
+		private static readonly int MAX_TYPE_VALUE = Enum.GetValues(typeof(DATA_TYPE)).Length - 1;
 
         private static readonly object threadLock = new object();
         private string sessionID;
 		private Socket socket;
 		private bool remoteLittleEndian;
 		private ExtendedDataOutput @out;
-		private EntityFactory factory;
+		private IEntityFactory factory;
 		private string hostName;
 		private int port;
 
@@ -84,7 +74,7 @@ namespace com.xxdb
                     string body = "connect\n";
                     @out.writeBytes("API 0 ");
                     @out.writeBytes(body.Length.ToString());
-                    @out.writeByte('\n');
+                    @out.writeChar('\n');
                     @out.writeBytes(body);
                     @out.flush();
 
@@ -133,7 +123,7 @@ namespace com.xxdb
 			}
 		}
 
-		public virtual Entity tryRun(string script)
+		public virtual IEntity tryRun(string script)
 		{
 
 			if (isBusy())
@@ -150,7 +140,7 @@ namespace com.xxdb
             }
 		}
 
-		public virtual Entity run(string script)
+		public virtual IEntity run(string script)
 		{
 			return run(script, (ProgressListener)null);
 		}
@@ -200,7 +190,7 @@ namespace com.xxdb
 			return true;
 		}
 
-		public virtual Entity run(string script, ProgressListener listener)
+		public virtual IEntity run(string script, ProgressListener listener)
 		{
             lock (threadLock)
             {
@@ -227,7 +217,7 @@ namespace com.xxdb
                 {
                     @out.writeBytes((listener != null ? "API2 " : "API ") + sessionID + " ");
                     @out.writeBytes(AbstractExtendedDataOutputStream.getUTFlength(body, 0, 0).ToString());
-                    @out.writeByte('\n');
+                    @out.writeChar('\n');
                     @out.writeBytes(body);
                     @out.flush();
 
@@ -247,7 +237,7 @@ namespace com.xxdb
                         tryReconnect();
                         @out.writeBytes((listener != null ? "API2 " : "API ") + sessionID + " ");
                         @out.writeBytes(AbstractExtendedDataOutputStream.getUTFlength(body, 0, 0).ToString());
-                        @out.writeByte('\n');
+                        @out.writeChar('\n');
                         @out.writeBytes(body);
                         @out.flush();
                         
@@ -295,7 +285,7 @@ namespace com.xxdb
 
                 if (numObject == 0)
                 {
-                    return new Void();
+                    return new data.Void();
                 }
                 try
                 {
@@ -312,7 +302,7 @@ namespace com.xxdb
                         throw new IOException("Invalid type value: " + type);
                     }
 
-                    DATA_FORM df = (DATA_FORM)Enum.GetValues(typeof(DATA_FORM)).GetValue(type);
+                    DATA_FORM df = (DATA_FORM)Enum.GetValues(typeof(DATA_FORM)).GetValue(form);
                     DATA_TYPE dt = (DATA_TYPE)Enum.GetValues(typeof(DATA_TYPE)).GetValue(type);
 
                     return factory.createEntity(df, dt, @in);
@@ -325,7 +315,7 @@ namespace com.xxdb
             }
 		}
 
-		public virtual Entity tryRun(string function, IList<Entity> arguments)
+		public virtual IEntity tryRun(string function, IList<IEntity> arguments)
 		{
 			if (isBusy())
 			{
@@ -340,7 +330,7 @@ namespace com.xxdb
 			}
 		}
 
-		public virtual Entity run(string function, IList<Entity> arguments)
+		public virtual IEntity run(string function, IList<IEntity> arguments)
 		{
             lock (threadLock)
             {
@@ -435,7 +425,7 @@ namespace com.xxdb
 
                     if (numObject == 0)
                     {
-                        return new Void();
+                        return new data.Void();
                     }
 
                     try
@@ -472,7 +462,7 @@ namespace com.xxdb
 			
 		}
 
-		public virtual void tryUpload(IDictionary<string, Entity> variableObjectMap)
+		public virtual void tryUpload(IDictionary<string, IEntity> variableObjectMap)
 		{
 			if (isBusy())
 			{
@@ -486,7 +476,7 @@ namespace com.xxdb
 			{
 			}
 		}
-		public virtual void upload(IDictionary<string, Entity> variableObjectMap)
+		public virtual void upload(IDictionary<string, IEntity> variableObjectMap)
 		{
 			if (variableObjectMap == null || variableObjectMap.Count == 0)
 			{
@@ -514,7 +504,7 @@ namespace com.xxdb
                         }
                     }
 
-                    IList<Entity> objects = new List<Entity>();
+                    IList<IEntity> objects = new List<IEntity>();
 
                     string body = "variable\n";
                     foreach (string key in variableObjectMap.Keys)
@@ -653,6 +643,25 @@ namespace com.xxdb
 				return port;
 			}
 		}
+
+        public string connect()
+        {
+            socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            socket.Connect("localhost", 8900);
+            StreamWriter @out = new LittleEndianDataOutputStream(new BufferedStream(new NetworkStream(socket)));
+
+            StreamReader @in = new LittleEndianDataInputStream(new BufferedStream(new NetworkStream(socket)));
+            string body = "connect\n";
+            @out.Write("API 0 ");
+            @out.Write(body.Length.ToString());
+            @out.Write('\n');
+            @out.Write(body);
+            @out.Flush();
+
+
+            string line = @in.ReadLine();
+            return line;
+        }
 	}
 
 }

@@ -1,25 +1,18 @@
-﻿namespace com.xxdb.data
+﻿namespace dolphindb.data
 {
     using System;
-    using com.xxdb.io;
-    using com.xxdb.jobjects;
-    using ExtendedDataOutput = com.xxdb.io.ExtendedDataOutput;
+    using dolphindb.io;
+    using dolphindb.jobjects;
 
-    public abstract class AbstractScalar : AbstractEntity, Scalar
+    public abstract class AbstractScalar : AbstractEntity, IScalar
 	{
-        public bool Null => throw new NotImplementedException();
+        protected abstract void writeScalarToOutputStream(ExtendedDataOutput @out);
 
         public override DATA_FORM getDataForm()
         {
             return DATA_FORM.DF_SCALAR;
         }
 
-        public void write(ExtendedDataOutput output)
-        {
-            //int flag = ((int)DATA_FORM.DF_SCALAR << 8) + getDataType().ordinal();
-            //output.writeShort(flag);
-            //writeScalarToOutputStream(output);
-        }
         public int rows()
         {
             return 1;
@@ -30,72 +23,49 @@
             return 1;
         }
 
-        public void setNull()
+        public void write(ExtendedDataOutput @out)
+        {
+            int flag = ((int)DATA_FORM.DF_SCALAR << 8) + (int)getDataType();
+	    	@out.writeInt(flag);
+            writeScalarToOutputStream(@out);
+        }
+
+        public string toString()
+        {
+            return getString();
+        }
+
+        public virtual bool isNull()
         {
             throw new NotImplementedException();
         }
 
-        public Number getNumber()
+        public virtual void setNull()
         {
             throw new NotImplementedException();
         }
 
-        public Temporal getTemporal()
+        public virtual object getNumber()
         {
             throw new NotImplementedException();
         }
 
-        public DATA_CATEGORY getDataCategory()
+        public virtual object getTemporal()
         {
             throw new NotImplementedException();
         }
 
-        public DATA_TYPE getDataType()
+        public virtual DATA_CATEGORY getDataCategory()
         {
             throw new NotImplementedException();
         }
 
-        public string getString()
+        public virtual DATA_TYPE getDataType()
         {
             throw new NotImplementedException();
         }
 
-        bool Entity.isScalar()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool isVector()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool isPair()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool isTable()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool isMatrix()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool isDictionary()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool isChart()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool isChunk()
+        public virtual string getString()
         {
             throw new NotImplementedException();
         }

@@ -1,12 +1,10 @@
-﻿using com.xxdb.jobjects;
+﻿using dolphindb.jobjects;
 using System;
-using com.xxdb.io;
-namespace com.xxdb.data
+using dolphindb.io;
+namespace dolphindb.data
 {
-	/// 
 	/// <summary>
 	/// Corresponds to DolphinDB int scalar
-	/// 
 	/// </summary>
 
 	public class BasicInt : AbstractScalar, IComparable<BasicInt>
@@ -23,45 +21,34 @@ namespace com.xxdb.data
 			value = @in.readInt();
 		}
 
-		public virtual int Int
+		public virtual int getInt()
 		{
-			get
-			{
-				return value;
-			}
+			return value;
 		}
 
-		public bool isNull
+		public override bool isNull()
 		{
-			get
-			{
-				return value == int.MinValue;
-			}
+			return value == int.MinValue;
 		}
 
-		public void setNull()
+		public override void setNull()
 		{
 			value = int.MinValue;
 		}
 
-		public  DATA_CATEGORY DataCategory
+		public override  DATA_CATEGORY getDataCategory()
 		{
-			get
-			{
-				return DATA_CATEGORY.INTEGRAL;
-			}
+			return DATA_CATEGORY.INTEGRAL;
 		}
 
-		public  DATA_TYPE DataType
+		public override DATA_TYPE getDataType()
 		{
-			get
-			{
-				return DATA_TYPE.DT_INT;
-			}
+        	return DATA_TYPE.DT_INT;
 		}
-		public int getNumber()
+
+        public override object getNumber()
 		{
-				if (isNull)
+				if (isNull())
 				{
 					return int.MinValue;
 				}
@@ -71,7 +58,7 @@ namespace com.xxdb.data
 				}
 		}
 
-		public Temporal getTemporal()
+		public override object getTemporal()
 		{
 			throw new Exception("Imcompatible data type");
 		}
@@ -93,7 +80,7 @@ namespace com.xxdb.data
 			return (new int?(value)).GetHashCode();
 		}
 
-		protected internal void WriteScalarToOutputStream(ExtendedDataOutput @out)
+		protected override void writeScalarToOutputStream(ExtendedDataOutput @out)
 		{
 			@out.writeInt(value);
 		}

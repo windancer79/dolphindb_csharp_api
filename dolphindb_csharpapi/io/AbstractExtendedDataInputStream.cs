@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 
-namespace com.xxdb.io
+namespace dolphindb.io
 {
 
 
@@ -10,7 +10,7 @@ namespace com.xxdb.io
 	{
 
 		private const int UTF8_STRING_LIMIT = 65536;
-		private byte[] buf_;
+		private sbyte[] buf_;
         protected Stream _inStream;
 		protected internal AbstractExtendedDataInputStream(Stream inStream):base(inStream)
 		{
@@ -28,11 +28,10 @@ namespace com.xxdb.io
 			return (byte)readUnsignedByte();
 		}
 
-
-
 		public void readFully(byte[] arg0)
 		{
-            _inStream.Read(arg0,0,arg0.Length);
+            
+            base.BaseStream.Read(arg0,0,arg0.Length);
 		}
 
 		public void readFully(byte[] arg0, int arg1, int arg2)
@@ -44,7 +43,7 @@ namespace com.xxdb.io
 
         public int readUnsignedByte()
 		{
-			int b1 = _inStream.ReadByte();
+			int b1 = base.Read();
 			if (0 > b1)
 			{
 				throw new EndOfStreamException();
@@ -57,23 +56,23 @@ namespace com.xxdb.io
 			return (int)_inStream.Seek(n,SeekOrigin.Current);
 		}
 
-		protected internal virtual byte readAndCheckByte()
+		protected internal virtual sbyte readAndCheckByte()
 		{
-			int b1 = _inStream.ReadByte();
+			int b1 = base.Read();
 
 			if (-1 == b1)
 			{
 				throw new EndOfStreamException();
 			}
-			return (byte) b1;
+			return (sbyte) b1;
 		}
 
-		protected internal virtual int fromBytes(byte b1, byte b2, byte b3, byte b4)
+		protected internal virtual int fromBytes(sbyte b1, sbyte b2, sbyte b3, sbyte b4)
 		{
 			return b1 << 24 | (b2 & 0xFF) << 16 | (b3 & 0xFF) << 8 | (b4 & 0xFF);
 		}
 
-		protected internal virtual long fromBytes(byte b1, byte b2, byte b3, byte b4, byte b5, byte b6, byte b7, byte b8)
+		protected internal virtual long fromBytes(sbyte b1, sbyte b2, sbyte b3, sbyte b4, sbyte b5, sbyte b6, sbyte b7, sbyte b8)
 		{
 			return (b1 & 0xFFL) << 56 | (b2 & 0xFFL) << 48 | (b3 & 0xFFL) << 40 | (b4 & 0xFFL) << 32 | (b5 & 0xFFL) << 24 | (b6 & 0xFFL) << 16 | (b7 & 0xFFL) << 8 | (b8 & 0xFFL);
 		}
@@ -83,7 +82,7 @@ namespace com.xxdb.io
             throw new NotImplementedException();
         }
 
-        byte ExtendedDataInput.readByte()
+        sbyte ExtendedDataInput.readByte()
         {
             throw new NotImplementedException();
         }
@@ -125,7 +124,7 @@ namespace com.xxdb.io
 
         short ExtendedDataInput.readShort()
         {
-            throw new NotImplementedException();
+            return (short)readUnsignedShort();
         }
 
         int ExtendedDataInput.readUnsignedByte()
@@ -140,11 +139,13 @@ namespace com.xxdb.io
 
         public abstract int readInt();
 
-        private String readUTF8(byte terminator)
+        public abstract int readUnsignedShort();
+
+        private String readUTF8(sbyte terminator)
         {
             if (buf_ == null)
-                buf_ = new byte[2048];
-            byte ch = readAndCheckByte();
+                buf_ = new sbyte[2048];
+            sbyte ch = readAndCheckByte();
             int count = 0;
             while (ch != terminator)
             {
@@ -152,15 +153,18 @@ namespace com.xxdb.io
                 {
                     if (count >= UTF8_STRING_LIMIT)
                         throw new IOException("UTF-8 string length exceeds the limit of 65536 bytes");
-                    byte[] tmp = new byte[buf_.Length * 2];
+                    sbyte[] tmp = new sbyte[buf_.Length * 2];
                     Array.Copy(buf_, 0, tmp, 0, buf_.Length);
                     buf_ = tmp;
                 }
                 buf_[count++] = ch;
                 ch = readAndCheckByte();
             }
-            return Encoding.UTF8.GetString(buf_, 0, count);
+            return StringHelperClass.NewString(buf_, 0, count);
         }
+
+        public abstract long readLong();
+        
     }
 
 }

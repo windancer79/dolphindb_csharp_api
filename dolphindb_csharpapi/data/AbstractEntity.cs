@@ -1,65 +1,41 @@
-﻿namespace com.xxdb.data
+﻿namespace dolphindb.data
 {
 
 	public abstract class AbstractEntity
 	{
         public abstract DATA_FORM getDataForm();
 
-		public bool isScalar
+		public bool isScalar()
 		{
-			get
-			{
-				return getDataForm() == DATA_FORM.DF_SCALAR;
-			}
+			return getDataForm() == DATA_FORM.DF_SCALAR;
 		}
-		public virtual bool Vector
+		public bool isVector()
 		{
-			get
-			{
-				return getDataForm() == DATA_FORM.DF_VECTOR;
-			}
+			return getDataForm() == DATA_FORM.DF_VECTOR;
 		}
-		public virtual bool Pair
+		public bool isPair()
 		{
-			get
-			{
-				return getDataForm() == DATA_FORM.DF_PAIR;
-			}
+			return getDataForm() == DATA_FORM.DF_PAIR;
 		}
-		public virtual bool Table
+		public bool isTable()
 		{
-			get
-			{
-				return getDataForm() == DATA_FORM.DF_TABLE;
-			}
+			return getDataForm() == DATA_FORM.DF_TABLE;
 		}
-		public virtual bool Matrix
+		public bool isMatrix()
 		{
-			get
-			{
-				return getDataForm() == DATA_FORM.DF_MATRIX;
-			}
+			return getDataForm() == DATA_FORM.DF_MATRIX;
 		}
-		public virtual bool Dictionary
+		public bool isDictionary()
 		{
-			get
-			{
-				return getDataForm() == DATA_FORM.DF_DICTIONARY;
-			}
+			return getDataForm() == DATA_FORM.DF_DICTIONARY;
 		}
-		public virtual bool Chart
+		public bool isChart()
 		{
-			get
-			{
-				return getDataForm() == DATA_FORM.DF_CHART;
-			}
+			return getDataForm() == DATA_FORM.DF_CHART;
 		}
-		public virtual bool Chunk
+		public bool isChunk()
 		{
-			get
-			{
-				return getDataForm() == DATA_FORM.DF_CHUNK;
-			}
+			return getDataForm() == DATA_FORM.DF_CHUNK;
 		}
 
 		protected internal DATA_CATEGORY getDataCategory(DATA_TYPE valueType)

@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace com.xxdb.io
+namespace dolphindb.io
 {
 
 
@@ -8,7 +8,9 @@ namespace com.xxdb.io
     {
         bool readBoolean();
 
-        byte readByte();
+        sbyte readByte();
+
+        long readLong();
 
         int readInt();
 

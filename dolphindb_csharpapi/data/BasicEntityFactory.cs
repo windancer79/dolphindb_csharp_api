@@ -1,13 +1,13 @@
-﻿using com.xxdb.data;
-using com.xxdb.io;
+﻿using dolphindb.data;
+using dolphindb.io;
 
-namespace com.xxdb.data
+namespace dolphindb.data
 {
     using System;
     using System.IO;
-    using ExtendedDataInput = com.xxdb.io.ExtendedDataInput;
+    using ExtendedDataInput = dolphindb.io.ExtendedDataInput;
 
-    public class BasicEntityFactory : EntityFactory
+    public class BasicEntityFactory : IEntityFactory
     {
         private TypeFactory[] factories;
 
@@ -17,8 +17,8 @@ namespace com.xxdb.data
             //factories[(int)DATA_TYPE.DT_BOOL] = new BooleanFactory(this);
             //factories[(int)DATA_TYPE.DT_BYTE] = new ByteFactory(this);
             //factories[(int)DATA_TYPE.DT_SHORT] = new ShortFactory(this);
-            factories[(int)DATA_TYPE.DT_INT] = new IntFactory(this);
-            //factories[(int)DATA_TYPE.DT_LONG] = new LongFactory(this);
+            factories[(int)DATA_TYPE.DT_INT] = new IntFactory();
+            factories[(int)DATA_TYPE.DT_LONG] = new LongFactory();
             //factories[(int)DATA_TYPE.DT_FLOAT] = new FloatFactory(this);
             //factories[(int)DATA_TYPE.DT_DOUBLE] = new DoubleFactory(this);
             //factories[(int)DATA_TYPE.DT_MINUTE] = new MinuteFactory(this);
@@ -39,7 +39,7 @@ namespace com.xxdb.data
             //factories[(int)DATA_TYPE.DT_RESOURCE] = new ResourceFactory(this);
         }
 
-        public Entity createEntity(DATA_FORM form, DATA_TYPE type, ExtendedDataInput @in)
+        public IEntity createEntity(DATA_FORM form, DATA_TYPE type, ExtendedDataInput @in)
         {
             //if (form == DATA_FORM.DF_TABLE)
             //{
@@ -99,7 +99,7 @@ namespace com.xxdb.data
             //}
         }
 
-        public Scalar createScalarWithDefaultValue(DATA_TYPE type)
+        public IScalar createScalarWithDefaultValue(DATA_TYPE type)
         {
             int index = (int)type;
             if (factories[index] == null)
@@ -114,24 +114,36 @@ namespace com.xxdb.data
 
         private class IntFactory : TypeFactory
         {
-            private readonly BasicEntityFactory outerInstance;
-
-            public IntFactory(BasicEntityFactory outerInstance)
-            {
-                this.outerInstance = outerInstance;
-            }
-
-            //JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-            //ORIGINAL LINE: public Scalar createScalar(com.xxdb.io.ExtendedDataInput in) throws java.io.IOException
-            public virtual Scalar createScalar(ExtendedDataInput @in)
+            public virtual IScalar createScalar(ExtendedDataInput @in)
             {
                 return new BasicInt(@in);
             }
 
-            public virtual Scalar createScalarWithDefaultValue()
+            public virtual IScalar createScalarWithDefaultValue()
             {
                 return new BasicInt(0);
             }
+        }
+
+        private class LongFactory : TypeFactory
+        {
+
+            public IScalar createScalar(ExtendedDataInput @in)
+                { return new BasicLong(@in);}
+            //      public Vector createVector(ExtendedDataInput @in)
+            //          { return new BasicLongVector(DATA_FORM.DF_VECTOR, @in);}
+            //      public Vector createPair(ExtendedDataInput @in)
+            //          { return new BasicLongVector(Entity.DATA_FORM.DF_PAIR, @in);}
+            //public Matrix createMatrix(ExtendedDataInput @in)
+            //          { return new BasicLongMatrix(@in);}
+            public IScalar createScalarWithDefaultValue()
+            { return new BasicLong(0); }
+            //      public Vector createVectorWithDefaultValue(int size)
+            //          { return new BasicLongVector(size); }
+            //      public Vector createPairWithDefaultValue()
+            //          { return new BasicLongVector(Entity.DATA_FORM.DF_PAIR, 2); }
+            //      public Matrix createMatrixWithDefaultValue(int rows, int columns)
+            //          { return new BasicLongMatrix(rows, columns); }
         }
     }
 
@@ -141,8 +153,7 @@ namespace com.xxdb.data
 
     public interface TypeFactory
     {
-
-        Scalar createScalar(ExtendedDataInput @in);
-        Scalar createScalarWithDefaultValue();
+        IScalar createScalar(ExtendedDataInput @in);
+        IScalar createScalarWithDefaultValue();
     }
 }

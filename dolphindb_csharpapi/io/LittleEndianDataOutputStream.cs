@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace com.xxdb.io
+namespace dolphindb.io
 {
 
 
@@ -27,7 +27,7 @@ namespace com.xxdb.io
 			write(0xFF & (v >> 24));
 		}
 
-		public void writeLong(long v)
+		public override void writeLong(long v)
 		{
 			write((int)(0xFF & v));
 			write((int)(0xFF & (v >> 8)));
@@ -43,7 +43,7 @@ namespace com.xxdb.io
 		{
 			if (buf == null)
 			{
-				buf = new byte[BUF_SIZE];
+				buf = new sbyte[BUF_SIZE];
 			}
 			int end = startIdx + len;
 			int pos = 0;
@@ -52,17 +52,17 @@ namespace com.xxdb.io
 				int v = A[i];
 				if (pos + 4 >= BUF_SIZE)
 				{
-					write(buf, 0, pos);
+					write((byte[])(Array)buf, 0, pos);
 					pos = 0;
 				}
-				buf[pos++] = unchecked((byte)(0xFF & (v)));
-				buf[pos++] = unchecked((byte)(0xFF & (v >> 8)));
-				buf[pos++] = unchecked((byte)(0xFF & (v >> 16)));
-				buf[pos++] = unchecked((byte)(0xFF & (v >> 24)));
+				buf[pos++] = unchecked((sbyte)(0xFF & (v)));
+				buf[pos++] = unchecked((sbyte)(0xFF & (v >> 8)));
+				buf[pos++] = unchecked((sbyte)(0xFF & (v >> 16)));
+				buf[pos++] = unchecked((sbyte)(0xFF & (v >> 24)));
 			}
 			if (pos > 0)
 			{
-				write(buf, 0, pos);
+				write((byte[])(Array)buf, 0, pos);
 			}
 		}
 
@@ -71,7 +71,7 @@ namespace com.xxdb.io
 		{
 			if (buf == null)
 			{
-				buf = new byte[BUF_SIZE];
+				buf = new sbyte[BUF_SIZE];
 			}
 			int end = startIdx + len;
 			int pos = 0;
@@ -80,15 +80,15 @@ namespace com.xxdb.io
 				short v = A[i];
 				if (pos + 2 >= BUF_SIZE)
 				{
-					write(buf, 0, pos);
+					write((byte[])(Array)buf, 0, pos);
 					pos = 0;
 				}
-				buf[pos++] = unchecked((byte)(0xFF & (v)));
-				buf[pos++] = unchecked((byte)(0xFF & (v >> 8)));
+				buf[pos++] = unchecked((sbyte)(0xFF & (v)));
+				buf[pos++] = unchecked((sbyte)(0xFF & (v >> 8)));
 			}
 			if (pos > 0)
 			{
-				write(buf, 0, pos);
+				write((byte[])(Array)buf, 0, pos);
 			}
 		}
 
@@ -96,7 +96,7 @@ namespace com.xxdb.io
 		{
 			if (buf == null)
 			{
-				buf = new byte[BUF_SIZE];
+				buf = new sbyte[BUF_SIZE];
 			}
 			int end = startIdx + len;
 			int pos = 0;
@@ -105,21 +105,21 @@ namespace com.xxdb.io
 				long v = A[i];
 				if (pos + 8 >= BUF_SIZE)
 				{
-					write(buf, 0, pos);
+					write((byte[])(Array)buf, 0, pos);
 					pos = 0;
 				}
-				buf[pos++] = unchecked((byte)(0xFF & (v)));
-				buf[pos++] = unchecked((byte)(0xFF & (v >> 8)));
-				buf[pos++] = unchecked((byte)(0xFF & (v >> 16)));
-				buf[pos++] = unchecked((byte)(0xFF & (v >> 24)));
-				buf[pos++] = unchecked((byte)(0xFF & (v >> 32)));
-				buf[pos++] = unchecked((byte)(0xFF & (v >> 40)));
-				buf[pos++] = unchecked((byte)(0xFF & (v >> 48)));
-				buf[pos++] = unchecked((byte)(0xFF & (v >> 56)));
+				buf[pos++] = unchecked((sbyte)(0xFF & (v)));
+				buf[pos++] = unchecked((sbyte)(0xFF & (v >> 8)));
+				buf[pos++] = unchecked((sbyte)(0xFF & (v >> 16)));
+				buf[pos++] = unchecked((sbyte)(0xFF & (v >> 24)));
+				buf[pos++] = unchecked((sbyte)(0xFF & (v >> 32)));
+				buf[pos++] = unchecked((sbyte)(0xFF & (v >> 40)));
+				buf[pos++] = unchecked((sbyte)(0xFF & (v >> 48)));
+				buf[pos++] = unchecked((sbyte)(0xFF & (v >> 56)));
 			}
 			if (pos > 0)
 			{
-				write(buf, 0, pos);
+				write((byte[])(Array)buf, 0, pos);
 			}
 		}
     }

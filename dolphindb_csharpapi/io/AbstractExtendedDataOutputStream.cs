@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 
-namespace com.xxdb.io
+namespace dolphindb.io
 {
 
 
@@ -13,7 +13,7 @@ namespace com.xxdb.io
 		public abstract void writeShortArray(short[] A, int startIdx, int len);
 		private const int UTF8_STRING_LIMIT = 65535;
 		protected internal const int BUF_SIZE = 4096;
-		protected internal byte[] buf;
+		protected internal sbyte[] buf;
 		private static readonly int longBufSize = BUF_SIZE / 8;
 		private static readonly int intBufSize = BUF_SIZE / 4;
 		private int[] intBuf;
@@ -60,8 +60,8 @@ namespace com.xxdb.io
             {
                 throw ex;
             }
-
         }
+        
 
         public void writeBoolean(bool v)
 		{
@@ -90,12 +90,11 @@ namespace com.xxdb.io
             
 		}
 
-		public void writeChar(int v)
+		public void writeChar(char v)
 		{
             try
             {
-                byte[] b = BitConverter.GetBytes(v);
-                _outStream.Write(b, 0, b.Length);
+                base.Write(v);
             }
             catch (IOException ex)
             {
@@ -360,7 +359,7 @@ namespace com.xxdb.io
             {
                 if (buf == null)
                 {
-                    buf = new byte[BUF_SIZE];
+                    buf = new sbyte[BUF_SIZE];
                 }
                 int end = startIdx + len;
                 int pos = 0;
@@ -376,18 +375,18 @@ namespace com.xxdb.io
                             char c = value[i++];
                             if (c >= '\u0001' && c <= '\u007f')
                             {
-                                buf[pos++] = (byte)c;
+                                buf[pos++] = (sbyte)c;
                             }
                             else if (c == '\u0000' || (c >= '\u0080' && c <= '\u07ff'))
                             {
-                                buf[pos++] = unchecked((byte)(0xc0 | (0x1f & (c >> 6))));
-                                buf[pos++] = unchecked((byte)(0x80 | (0x3f & c)));
+                                buf[pos++] = unchecked((sbyte)(0xc0 | (0x1f & (c >> 6))));
+                                buf[pos++] = unchecked((sbyte)(0x80 | (0x3f & c)));
                             }
                             else
                             {
-                                buf[pos++] = unchecked((byte)(0xe0 | (0x0f & (c >> 12))));
-                                buf[pos++] = unchecked((byte)(0x80 | (0x3f & (c >> 6))));
-                                buf[pos++] = unchecked((byte)(0x80 | (0x3f & c)));
+                                buf[pos++] = unchecked((sbyte)(0xe0 | (0x0f & (c >> 12))));
+                                buf[pos++] = unchecked((sbyte)(0x80 | (0x3f & (c >> 6))));
+                                buf[pos++] = unchecked((sbyte)(0x80 | (0x3f & c)));
                             }
                         }
                         if (i >= valueLen)
@@ -396,14 +395,14 @@ namespace com.xxdb.io
                         }
                         if (pos + 4 >= buf.Length)
                         {
-                            _outStream.Write(buf, 0, pos);
+                            _outStream.Write((byte[])(Array)buf, 0, pos);
                             pos = 0;
                         }
                     } while (i < valueLen);
                 }
                 if (pos > 0)
                 {
-                    _outStream.Write(buf, 0, pos);
+                    _outStream.Write((byte[])(Array)buf, 0, pos);
                 }
             }
             catch (IOException ex)
@@ -414,7 +413,8 @@ namespace com.xxdb.io
 		}
 
         public abstract void writeInt(int value);
-      
+
+        public abstract void writeLong(long value);
     }
 
 }

@@ -1,4 +1,4 @@
-﻿namespace com.xxdb.io
+﻿namespace dolphindb.io
 {
 
 
@@ -21,12 +21,13 @@
 		void writeStringArray(string[] A, int startIdx, int len);
         void writeBoolean(bool v);
         void writeByte(int v);
-        void writeChar(int v);
+        void writeChar(char v);
         void writeFloat(float v);
         void writeDouble(double v);
         void writeBytes(string s);
         void writeChars(string s);
         void writeUTF(string value);
         void writeInt(int value);
+        void writeLong(long value);
     }
 }

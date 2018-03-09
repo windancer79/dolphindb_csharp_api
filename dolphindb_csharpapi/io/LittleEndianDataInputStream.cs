@@ -1,5 +1,5 @@
 ﻿using System.IO;
-namespace com.xxdb.io
+namespace dolphindb.io
 {
 
 
@@ -12,31 +12,31 @@ namespace com.xxdb.io
 
 		public override int readInt()
 		{
-			byte b1 = readAndCheckByte();
-			byte b2 = readAndCheckByte();
-			byte b3 = readAndCheckByte();
-			byte b4 = readAndCheckByte();
+			sbyte b1 = readAndCheckByte();
+			sbyte b2 = readAndCheckByte();
+			sbyte b3 = readAndCheckByte();
+			sbyte b4 = readAndCheckByte();
 			return fromBytes(b4, b3, b2, b1);
 		}
 
-		public long readLong()
+		public override long readLong()
 		{
-			byte b1 = readAndCheckByte();
-			byte b2 = readAndCheckByte();
-			byte b3 = readAndCheckByte();
-			byte b4 = readAndCheckByte();
-			byte b5 = readAndCheckByte();
-			byte b6 = readAndCheckByte();
-			byte b7 = readAndCheckByte();
-			byte b8 = readAndCheckByte();
+			sbyte b1 = readAndCheckByte();
+			sbyte b2 = readAndCheckByte();
+			sbyte b3 = readAndCheckByte();
+			sbyte b4 = readAndCheckByte();
+			sbyte b5 = readAndCheckByte();
+			sbyte b6 = readAndCheckByte();
+			sbyte b7 = readAndCheckByte();
+			sbyte b8 = readAndCheckByte();
 			return fromBytes(b8, b7, b6, b5, b4, b3, b2, b1);
 		}
 
-		public int readUnsignedShort()
+		public override int readUnsignedShort()
 		{
-			byte b1 = readAndCheckByte();
-			byte b2 = readAndCheckByte();
-			return fromBytes((byte)0, (byte)0, b2, b1);
+			sbyte b1 = readAndCheckByte();
+			sbyte b2 = readAndCheckByte();
+			return fromBytes((sbyte)0, (sbyte)0, b2, b1);
 		}
 	}
 
