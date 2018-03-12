@@ -264,7 +264,7 @@ namespace dolphindb
                     header = @in.readLine();
                 }
 
-                string[] headers = header.Split(" ", true);
+                string[] headers = header.Split(' ');
                 if (headers.Length != 3)
                 {
                     socket = null;

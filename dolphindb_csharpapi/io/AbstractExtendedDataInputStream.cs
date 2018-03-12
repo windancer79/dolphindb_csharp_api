@@ -30,21 +30,20 @@ namespace dolphindb.io
 
 		public void readFully(byte[] arg0)
 		{
-            
             base.BaseStream.Read(arg0,0,arg0.Length);
 		}
 
 		public void readFully(byte[] arg0, int arg1, int arg2)
 		{
-            _inStream.Read(arg0, arg1, arg2);
+            base.BaseStream.Read(arg0, arg1, arg2);
 		}
-
-		
 
         public int readUnsignedByte()
 		{
-			int b1 = base.Read();
-			if (0 > b1)
+            byte[] b = new byte[1];
+            int j = base.BaseStream.Read(b, (int)base.BaseStream.Position, 1);
+            sbyte b1 = ByteHelper.toSByte(b[0]);
+            if (0 > b1)
 			{
 				throw new EndOfStreamException();
 			}
@@ -58,13 +57,14 @@ namespace dolphindb.io
 
 		protected internal virtual sbyte readAndCheckByte()
 		{
-			int b1 = base.Read();
-
-			if (-1 == b1)
-			{
-				throw new EndOfStreamException();
-			}
-			return (sbyte) b1;
+            byte[] b = new byte[1];
+			int j = base.BaseStream.Read(b,0,1);
+            sbyte b1 = ByteHelper.toSByte(b[0]);
+                if (-1 == b1)
+                {
+                    throw new EndOfStreamException();
+                }
+                return b1;
 		}
 
 		protected internal virtual int fromBytes(sbyte b1, sbyte b2, sbyte b3, sbyte b4)
@@ -160,7 +160,7 @@ namespace dolphindb.io
                 buf_[count++] = ch;
                 ch = readAndCheckByte();
             }
-            return StringHelperClass.NewString(buf_, 0, count);
+            return ByteHelper.NewString(buf_, 0, count);
         }
 
         public abstract long readLong();

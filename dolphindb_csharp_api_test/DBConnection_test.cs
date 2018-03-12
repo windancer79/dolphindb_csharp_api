@@ -5,6 +5,7 @@ using dolphindb.data;
 using System.IO;
 using System.Net.Sockets;
 using dolphindb.io;
+using System.Text;
 
 namespace dolphindb_csharp_api_test
 {
@@ -16,10 +17,10 @@ namespace dolphindb_csharp_api_test
         {
 
             Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            socket.Connect("localhost", 8900);
+            socket.Connect("192.168.1.61", 8702);
             StreamWriter @out = new StreamWriter(new NetworkStream(socket));
 
-            StreamReader @in = new StreamReader(new NetworkStream(socket));
+            StreamReader @in = new StreamReader(new NetworkStream(socket),Encoding.Default);
             string body = "connect\n";
             @out.Write("API 0 ");
             @out.Write(body.Length.ToString());
@@ -30,6 +31,7 @@ namespace dolphindb_csharp_api_test
             string line = @in.ReadLine();
             int endPos = line.IndexOf(' ');
             string sessionID = line.Substring(0, endPos);
+
 
             string script = "129";
             body = "script\n" + script;
@@ -42,11 +44,25 @@ namespace dolphindb_csharp_api_test
                 @out.Write(body);
                 @out.Flush();
 
-                header = @in.ReadLine();
+                //header = @in.ReadLine();
+                //string session = @in.ReadLine();
+                //string msg = @in.ReadLine();
+                //string type = @in.ReadLine();
+                //string res = @in.ReadLine();
+                //long len = @in.BaseStream.Length;
+                byte[] result = new byte[100];
 
-                string msg1 = @in.ReadLine();
-                string msg2 = @in.ReadLine();
-                string msg3 = @in.ReadLine();
+
+                int i = 0;
+                do
+                {
+                    if (i>23) break;
+                    int j = @in.BaseStream.Read(result, i, 1);
+                    i++;
+                    //Console.Out.WriteLine(i.ToString() + " : " + Convert.ToString((int)result[i]));
+                } while (true);
+
+                Assert.AreEqual(129, (int)result[23]);
             }
             catch
             {
@@ -65,7 +81,7 @@ namespace dolphindb_csharp_api_test
         public void Test_Connect_demo()
         {
             DBConnection db = new DBConnection();
-            Console.Out.WriteLine(db.connect());
+           // Console.Out.WriteLine(db.connect());
         }
 
         [TestMethod]
@@ -76,7 +92,7 @@ namespace dolphindb_csharp_api_test
             Assert.AreEqual(63, ((BasicInt)db.run("63")).getInt());
             Assert.AreEqual(129, ((BasicInt)db.run("129")).getInt());
             Assert.AreEqual(255, ((BasicInt)db.run("255")).getInt());
-            Assert.AreEqual(1023, ((BasicInt)db.run("1023")).getInt());
+            Assert.AreEqual(1023, ((BasicInt)db.run("exec d fr")).getInt());
             Assert.AreEqual(2047, ((BasicInt)db.run("2047")).getInt());
         }
 

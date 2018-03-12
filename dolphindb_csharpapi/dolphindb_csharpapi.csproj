@@ -62,7 +62,7 @@
     <Compile Include="io\LittleEndianDataOutputStream.cs" />
     <Compile Include="io\ProgressListener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StringHelperClass.cs" />
+    <Compile Include="ByteHelper.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
