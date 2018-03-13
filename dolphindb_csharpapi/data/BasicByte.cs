@@ -1,92 +1,62 @@
-﻿using com.xxdb.jobjects;
-using System;
+﻿using System;
+using dolphindb.io;
 
-namespace com.xxdb.data
+namespace dolphindb.data
 {
-
-
-	using ExtendedDataInput = com.xxdb.io.ExtendedDataInput;
-	using ExtendedDataOutput = com.xxdb.io.ExtendedDataOutput;
-
-	/// 
-	/// <summary>
-	/// Corresponds to DolphinDB char scalar
-	/// 
-	/// </summary>
 
 	public class BasicByte : AbstractScalar, IComparable<BasicByte>
 	{
-		private sbyte value;
+		private byte value;
 
-		public BasicByte(sbyte value)
+		public BasicByte(byte value)
 		{
 			this.value = value;
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: public BasicByte(com.xxdb.io.ExtendedDataInput in) throws java.io.IOException
 		public BasicByte(ExtendedDataInput @in)
 		{
 			value = @in.readByte();
 		}
 
-		public virtual sbyte Byte
+		public virtual byte getValue()
 		{
-			get
-			{
-				return value;
-			}
+			return value;
 		}
 
-		public override bool Null
+		public override bool isNull()
 		{
-			get
-			{
-				return value == sbyte.MinValue;
-			}
+			return value == byte.MinValue;
 		}
 
 		public override void setNull()
 		{
-			value = sbyte.MinValue;
+			value = byte.MinValue;
 		}
 
-		public override DATA_CATEGORY DataCategory
+		public override DATA_CATEGORY getDataCategory()
 		{
-			get
-			{
-				return DATA_CATEGORY.INTEGRAL;
-			}
+			return DATA_CATEGORY.INTEGRAL;
 		}
 
-		public override DATA_TYPE DataType
+		public override DATA_TYPE getDataType()
 		{
-			get
-			{
-				return DATA_TYPE.DT_BYTE;
-			}
+			return DATA_TYPE.DT_BYTE;
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: public Number getNumber() throws Exception
-		public override Number getNumber()
+		public override object getNumber()
 		{
-			
-					return new sbyte?(value);
+			return new byte?(value);
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: @Override public java.time.temporal.Temporal getTemporal() throws Exception
-		public override Temporal getTemporal()
+
+		public override object getTemporal()
 		{
-				throw new Exception("Imcompatible data type");
+			throw new Exception("Imcompatible data type");
 		}
 
-		public override string String
+		public override string getString()
 		{
-			get
-			{
-				if (Null)
+			if (isNull())
 				{
 					return "";
 				}
@@ -98,7 +68,6 @@ namespace com.xxdb.data
 				{
 					return value.ToString();
 				}
-			}
 		}
 
 		public override bool Equals(object o)
@@ -115,20 +84,18 @@ namespace com.xxdb.data
 
 		public override int GetHashCode()
 		{
-			return (new sbyte?(value)).GetHashCode();
+			return (new byte?(value)).GetHashCode();
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: protected void writeScalarToOutputStream(com.xxdb.io.ExtendedDataOutput out) throws java.io.IOException
-		protected internal override void WriteScalarToOutputStream(ExtendedDataOutput @out)
+		protected override void writeScalarToOutputStream(ExtendedDataOutput @out)
 		{
 			@out.writeByte(value);
 		}
 
 		public virtual int CompareTo(BasicByte o)
 		{
-			return Byte.compare(value, o.value);
-		}
+            return value.CompareTo(o.value);
+        }
 	}
 
 }

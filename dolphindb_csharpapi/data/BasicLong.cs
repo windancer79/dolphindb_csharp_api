@@ -24,7 +24,7 @@ namespace dolphindb.data
             value = @in.readLong();
         }
 
-        public virtual long getLong()
+        public virtual long getValue()
         {
             return value;
         }

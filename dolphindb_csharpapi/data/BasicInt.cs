@@ -21,7 +21,7 @@ namespace dolphindb.data
 			value = @in.readInt();
 		}
 
-		public virtual int getInt()
+		public virtual int getValue()
 		{
 			return value;
 		}

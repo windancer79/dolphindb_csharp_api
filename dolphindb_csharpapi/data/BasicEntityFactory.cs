@@ -14,13 +14,13 @@ namespace dolphindb.data
         public BasicEntityFactory()
         {
             factories = new TypeFactory[Enum.GetValues(typeof(DATA_TYPE)).Length];
-            //factories[(int)DATA_TYPE.DT_BOOL] = new BooleanFactory(this);
-            //factories[(int)DATA_TYPE.DT_BYTE] = new ByteFactory(this);
-            //factories[(int)DATA_TYPE.DT_SHORT] = new ShortFactory(this);
+            factories[(int)DATA_TYPE.DT_BOOL] = new BooleanFactory();
+            factories[(int)DATA_TYPE.DT_BYTE] = new ByteFactory();
+            factories[(int)DATA_TYPE.DT_SHORT] = new ShortFactory();
             factories[(int)DATA_TYPE.DT_INT] = new IntFactory();
             factories[(int)DATA_TYPE.DT_LONG] = new LongFactory();
-            //factories[(int)DATA_TYPE.DT_FLOAT] = new FloatFactory(this);
-            //factories[(int)DATA_TYPE.DT_DOUBLE] = new DoubleFactory(this);
+            factories[(int)DATA_TYPE.DT_FLOAT] = new FloatFactory();
+            factories[(int)DATA_TYPE.DT_DOUBLE] = new DoubleFactory();
             //factories[(int)DATA_TYPE.DT_MINUTE] = new MinuteFactory(this);
             //factories[(int)DATA_TYPE.DT_SECOND] = new SecondFactory(this);
             //factories[(int)DATA_TYPE.DT_TIME] = new TimeFactory(this);
@@ -111,6 +111,43 @@ namespace dolphindb.data
                 return factories[index].createScalarWithDefaultValue();
             }
         }
+        private class BooleanFactory : TypeFactory
+        {
+
+            public IScalar createScalar(ExtendedDataInput @in){ return new BasicBoolean(@in); }
+      //      public Vector createVector(ExtendedDataInput @in){ return new BasicBooleanVector(Entity.DATA_FORM.DF_VECTOR, @in);}
+      //      public Vector createPair(ExtendedDataInput @in){ return new BasicBooleanVector(Entity.DATA_FORM.DF_PAIR, @in);}
+		    //public Matrix createMatrix(ExtendedDataInput @in){ return new BasicBooleanMatrix(@in);}
+		    public IScalar createScalarWithDefaultValue() { return new BasicBoolean(false); }
+            //public Vector createVectorWithDefaultValue(int size) { return new BasicBooleanVector(size); }
+            //public Vector createPairWithDefaultValue() { return new BasicBooleanVector(Entity.DATA_FORM.DF_PAIR, 2); }
+            //public Matrix createMatrixWithDefaultValue(int rows, int columns) { return new BasicBooleanMatrix(rows, columns); }
+	    }
+	
+	    private class ByteFactory : TypeFactory
+        {
+            public IScalar createScalar(ExtendedDataInput @in){ return new BasicByte(@in);}
+		    //public Vector createVector(ExtendedDataInput @in){ return new BasicByteVector(Entity.DATA_FORM.DF_VECTOR, @in);}
+		    //public Vector createPair(ExtendedDataInput @in){ return new BasicByteVector(Entity.DATA_FORM.DF_PAIR, @in);}
+		    //public Matrix createMatrix(ExtendedDataInput @in){ return new BasicByteMatrix(@in);}
+		    public IScalar createScalarWithDefaultValue() { return new BasicByte((byte)0); }
+            //public Vector createVectorWithDefaultValue(int size) { return new BasicByteVector(size); }
+            //public Vector createPairWithDefaultValue() { return new BasicByteVector(Entity.DATA_FORM.DF_PAIR, 2); }
+            //public Matrix createMatrixWithDefaultValue(int rows, int columns) { return new BasicByteMatrix(rows, columns); }
+	    }
+	
+	    private class ShortFactory : TypeFactory
+        {
+
+            public IScalar createScalar(ExtendedDataInput @in){ return new BasicShort(@in);}
+		    //public Vector createVector(ExtendedDataInput @in){ return new BasicShortVector(Entity.DATA_FORM.DF_VECTOR, @in);}
+		    //public Vector createPair(ExtendedDataInput @in){ return new BasicShortVector(Entity.DATA_FORM.DF_PAIR, @in);}
+		    //public Matrix createMatrix(ExtendedDataInput @in){ return new BasicShortMatrix(@in);}
+		    public IScalar createScalarWithDefaultValue() { return new BasicShort((short)0); }
+            //public Vector createVectorWithDefaultValue(int size) { return new BasicShortVector(size); }
+            //public Vector createPairWithDefaultValue() { return new BasicShortVector(Entity.DATA_FORM.DF_PAIR, 2); }
+            //public Matrix createMatrixWithDefaultValue(int rows, int columns) { return new BasicShortMatrix(rows, columns); }
+	    }
 
         private class IntFactory : TypeFactory
         {
@@ -145,6 +182,31 @@ namespace dolphindb.data
             //      public Matrix createMatrixWithDefaultValue(int rows, int columns)
             //          { return new BasicLongMatrix(rows, columns); }
         }
+
+        private class FloatFactory : TypeFactory
+        {
+            public IScalar createScalar(ExtendedDataInput @in) { return new BasicFloat(@in); }
+        //  public Vector createVector(ExtendedDataInput @in) { return new BasicFloatVector(Entity.DATA_FORM.DF_VECTOR, @in);}
+        //  public Vector createPair(ExtendedDataInput @in) { return new BasicFloatVector(Entity.DATA_FORM.DF_PAIR, @in);}
+        //  public Matrix createMatrix(ExtendedDataInput @in) { return new BasicFloatMatrix(@in);}
+            public IScalar createScalarWithDefaultValue() { return new BasicFloat(0); }
+            //public Vector createVectorWithDefaultValue(int size) { return new BasicFloatVector(size); }
+            //public Vector createPairWithDefaultValue() { return new BasicFloatVector(Entity.DATA_FORM.DF_PAIR, 2); }
+            //public Matrix createMatrixWithDefaultValue(int rows, int columns) { return new BasicFloatMatrix(rows, columns); }
+	    }
+	
+	    private class DoubleFactory : TypeFactory
+        {
+
+            public IScalar createScalar(ExtendedDataInput @in) { return new BasicDouble(@in);}
+		    //public Vector createVector(ExtendedDataInput @in) { return new BasicDoubleVector(Entity.DATA_FORM.DF_VECTOR, @in);}
+		    //public Vector createPair(ExtendedDataInput @in) { return new BasicDoubleVector(Entity.DATA_FORM.DF_PAIR, @in);}
+		    //public Matrix createMatrix(ExtendedDataInput @in) { return new BasicDoubleMatrix(@in);}
+		    public IScalar createScalarWithDefaultValue() { return new BasicDouble(0); }
+            //public Vector createVectorWithDefaultValue(int size) { return new BasicDoubleVector(size); }
+            //public Vector createPairWithDefaultValue() { return new BasicDoubleVector(Entity.DATA_FORM.DF_PAIR, 2); }
+            //public Matrix createMatrixWithDefaultValue(int rows, int columns) { return new BasicDoubleMatrix(rows, columns); }
+	    }
     }
 
 

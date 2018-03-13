@@ -8,7 +8,7 @@ namespace dolphindb.io
     {
         bool readBoolean();
 
-        sbyte readByte();
+        byte readByte();
 
         long readLong();
 

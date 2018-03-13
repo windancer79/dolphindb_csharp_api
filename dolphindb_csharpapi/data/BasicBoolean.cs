@@ -1,13 +1,9 @@
-﻿using com.xxdb.jobjects;
+﻿using dolphindb.data;
+using dolphindb.io;
 using System;
 
-namespace com.xxdb.data
+namespace dolphindb.data
 {
-
-
-	using ExtendedDataInput = com.xxdb.io.ExtendedDataInput;
-	using ExtendedDataOutput = com.xxdb.io.ExtendedDataOutput;
-
 	/// 
 	/// <summary>
 	/// Corresponds to DolphinDB bool scalar
@@ -16,102 +12,76 @@ namespace com.xxdb.data
 
 	public class BasicBoolean : AbstractScalar, IComparable<BasicBoolean>
 	{
-		private sbyte value;
+		private byte value;
 
 		public BasicBoolean(bool value)
 		{
-			this.value = value ? (sbyte)1 : (sbyte)0;
+			this.value = value ? (byte)1 : (byte)0;
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: public BasicBoolean(com.xxdb.io.ExtendedDataInput in) throws java.io.IOException
 		public BasicBoolean(ExtendedDataInput @in)
 		{
 			value = @in.readByte();
 		}
 
-		protected internal BasicBoolean(sbyte value)
+		protected internal BasicBoolean(byte value)
 		{
 			this.value = value;
 		}
 
-		public virtual bool Boolean
+		public virtual bool getValue()
 		{
-			get
-			{
-				return value != 0;
-			}
+			return value != 0;
 		}
 
-		public override bool Null
+		public override bool isNull()
 		{
-			get
-			{
-				return value == sbyte.MinValue;
-			}
+			return value == byte.MinValue;
 		}
 
 		public override void setNull()
 		{
-			value = sbyte.MinValue;
+			value = byte.MinValue;
 		}
 
-		public override DATA_CATEGORY DataCategory
+		public override DATA_CATEGORY getDataCategory()
 		{
-			get
-			{
-				return DATA_CATEGORY.LOGICAL;
-			}
+			return DATA_CATEGORY.LOGICAL;
 		}
 
-		public override DATA_TYPE DataType
+		public override DATA_TYPE getDataType()
 		{
-			get
-			{
-				return DATA_TYPE.DT_BOOL;
-			}
+			return DATA_TYPE.DT_BOOL;
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: public Number getNumber() throws Exception
-		public override Number Number
+        public override object getNumber()
 		{
-			get
-			{
-				if (Null)
+			
+				if (isNull())
 				{
 					return null;
 				}
 				else
 				{
-					return new sbyte?(value);
+					return new byte?(value);
 				}
-			}
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: @Override public java.time.temporal.Temporal getTemporal() throws Exception
-		public override Temporal Temporal
+		public override object getTemporal()
 		{
-			get
-			{
-				throw new Exception("Imcompatible data type");
-			}
+			throw new Exception("Imcompatible data type");
 		}
 
-		public override string String
+		public override string getString()
 		{
-			get
-			{
-				if (Null)
+				if (isNull())
 				{
 					return "";
 				}
 				else
 				{
-					return Boolean.ToString();
+					return getValue().ToString();
 				}
-			}
 		}
 
 		public override bool Equals(object o)
@@ -128,20 +98,18 @@ namespace com.xxdb.data
 
 		public override int GetHashCode()
 		{
-			return (new sbyte?(value)).GetHashCode();
+			return (new byte?(value)).GetHashCode();
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: protected void writeScalarToOutputStream(com.xxdb.io.ExtendedDataOutput out) throws java.io.IOException
-		protected internal override void WriteScalarToOutputStream(ExtendedDataOutput @out)
+		protected override void writeScalarToOutputStream(ExtendedDataOutput @out)
 		{
 			@out.writeByte(value);
 		}
 
 		public virtual int CompareTo(BasicBoolean o)
 		{
-			return Byte.compare(value, o.value);
-		}
+            return value.CompareTo(o.value);
+        }
 	}
 
 }

@@ -2,7 +2,6 @@
 {
     using System;
     using dolphindb.io;
-    using dolphindb.jobjects;
 
     public abstract class AbstractScalar : AbstractEntity, IScalar
 	{

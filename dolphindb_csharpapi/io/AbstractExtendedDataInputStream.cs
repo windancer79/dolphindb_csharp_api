@@ -6,16 +6,15 @@ namespace dolphindb.io
 {
 
 
-	public abstract class AbstractExtendedDataInputStream : StreamReader,ExtendedDataInput
+	public abstract class AbstractExtendedDataInputStream : BinaryReader,ExtendedDataInput
 	{
 
 		private const int UTF8_STRING_LIMIT = 65536;
-		private sbyte[] buf_;
+		private byte[] buf_;
         protected Stream _inStream;
 		protected internal AbstractExtendedDataInputStream(Stream inStream):base(inStream)
 		{
             _inStream = inStream;
-
         }
 
 		public bool readBoolean()
@@ -30,19 +29,17 @@ namespace dolphindb.io
 
 		public void readFully(byte[] arg0)
 		{
-            base.BaseStream.Read(arg0,0,arg0.Length);
+            base.Read(arg0,0,arg0.Length);
 		}
 
 		public void readFully(byte[] arg0, int arg1, int arg2)
 		{
-            base.BaseStream.Read(arg0, arg1, arg2);
+            base.Read(arg0, arg1, arg2);
 		}
 
         public int readUnsignedByte()
 		{
-            byte[] b = new byte[1];
-            int j = base.BaseStream.Read(b, (int)base.BaseStream.Position, 1);
-            sbyte b1 = ByteHelper.toSByte(b[0]);
+            byte b1 = this.ReadByte();
             if (0 > b1)
 			{
 				throw new EndOfStreamException();
@@ -55,71 +52,28 @@ namespace dolphindb.io
 			return (int)_inStream.Seek(n,SeekOrigin.Current);
 		}
 
-		protected internal virtual sbyte readAndCheckByte()
+		protected internal virtual byte readAndCheckByte()
 		{
-            byte[] b = new byte[1];
-			int j = base.BaseStream.Read(b,0,1);
-            sbyte b1 = ByteHelper.toSByte(b[0]);
-                if (-1 == b1)
-                {
-                    throw new EndOfStreamException();
-                }
-                return b1;
+            byte b = this.ReadByte();
+
+            byte b1 = b;
+           
+            return (byte)b1;
 		}
 
-		protected internal virtual int fromBytes(sbyte b1, sbyte b2, sbyte b3, sbyte b4)
+		protected internal virtual int fromBytes(byte b1, byte b2, byte b3, byte b4)
 		{
 			return b1 << 24 | (b2 & 0xFF) << 16 | (b3 & 0xFF) << 8 | (b4 & 0xFF);
 		}
 
-		protected internal virtual long fromBytes(sbyte b1, sbyte b2, sbyte b3, sbyte b4, sbyte b5, sbyte b6, sbyte b7, sbyte b8)
+		protected internal virtual long fromBytes(byte b1, byte b2, byte b3, byte b4, byte b5, byte b6, byte b7, byte b8)
 		{
 			return (b1 & 0xFFL) << 56 | (b2 & 0xFFL) << 48 | (b3 & 0xFFL) << 40 | (b4 & 0xFFL) << 32 | (b5 & 0xFFL) << 24 | (b6 & 0xFFL) << 16 | (b7 & 0xFFL) << 8 | (b8 & 0xFFL);
 		}
 
-        bool ExtendedDataInput.readBoolean()
-        {
-            throw new NotImplementedException();
-        }
-
-        sbyte ExtendedDataInput.readByte()
-        {
-            throw new NotImplementedException();
-        }
-
-        char ExtendedDataInput.readChar()
-        {
-            throw new NotImplementedException();
-        }
-
-        double ExtendedDataInput.readDouble()
-        {
-            throw new NotImplementedException();
-        }
-
-        float ExtendedDataInput.readFloat()
-        {
-            throw new NotImplementedException();
-        }
-
-        void ExtendedDataInput.readFully(byte[] arg0)
-        {
-            throw new NotImplementedException();
-        }
-
-        void ExtendedDataInput.readFully(byte[] arg0, int arg1, int arg2)
-        {
-            throw new NotImplementedException();
-        }
-
         string ExtendedDataInput.readLine()
         {
-            return base.ReadLine();
-        }
-
-        string ExtendedDataInput.readString()
-        {
-            throw new NotImplementedException();
+            return readUTF8((byte)'\n');
         }
 
         short ExtendedDataInput.readShort()
@@ -129,7 +83,7 @@ namespace dolphindb.io
 
         int ExtendedDataInput.readUnsignedByte()
         {
-            throw new NotImplementedException();
+            return base.ReadByte();
         }
 
         int ExtendedDataInput.skipBytes(int n)
@@ -141,11 +95,11 @@ namespace dolphindb.io
 
         public abstract int readUnsignedShort();
 
-        private String readUTF8(sbyte terminator)
+        private String readUTF8(byte terminator)
         {
             if (buf_ == null)
-                buf_ = new sbyte[2048];
-            sbyte ch = readAndCheckByte();
+                buf_ = new byte[2048];
+            byte ch = readAndCheckByte();
             int count = 0;
             while (ch != terminator)
             {
@@ -153,18 +107,49 @@ namespace dolphindb.io
                 {
                     if (count >= UTF8_STRING_LIMIT)
                         throw new IOException("UTF-8 string length exceeds the limit of 65536 bytes");
-                    sbyte[] tmp = new sbyte[buf_.Length * 2];
+                    byte[] tmp = new byte[buf_.Length * 2];
                     Array.Copy(buf_, 0, tmp, 0, buf_.Length);
                     buf_ = tmp;
                 }
                 buf_[count++] = ch;
                 ch = readAndCheckByte();
             }
-            return ByteHelper.NewString(buf_, 0, count);
+            return Encoding.Default.GetString(buf_, 0, count);
         }
 
         public abstract long readLong();
-        
-    }
 
+        public override int Read()
+        {
+            int re = base.ReadByte();
+            return re;
+        }
+
+        byte ExtendedDataInput.readByte()
+        {
+            return base.ReadByte();
+        }
+
+        public char readChar()
+        {
+            return base.ReadChar();
+        }
+
+        public double readDouble()
+        {
+            return base.ReadDouble();
+        }
+
+        public float readFloat()
+        {
+            byte[] b = base.ReadBytes(4);
+            return BitConverter.ToSingle(b,0);
+        }
+
+        public string readString()
+        {
+            return base.ReadString();
+        }
+    }
+    
 }

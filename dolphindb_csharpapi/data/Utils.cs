@@ -158,7 +158,7 @@ namespace com.xxdb.data
 		public static long countNanoseconds(DateTime dt)
 		{
 			long seconds = countSeconds(dt);
-			return seconds * 1000000000l + dt.Nano;
+			return seconds * 1000000000L + dt.Nano;
 		}
 
 		/// <summary>

@@ -1,12 +1,9 @@
-﻿using System;
+﻿using dolphindb.data;
+using dolphindb.io;
+using System;
 
-namespace com.xxdb.data
+namespace dolphindb.data
 {
-
-
-	using ExtendedDataInput = com.xxdb.io.ExtendedDataInput;
-	using ExtendedDataOutput = com.xxdb.io.ExtendedDataOutput;
-
 	/// 
 	/// <summary>
 	/// Corresponds to DolphinDB double scalar
@@ -15,8 +12,8 @@ namespace com.xxdb.data
 
 	public class BasicDouble : AbstractScalar, IComparable<BasicDouble>
 	{
-		private static readonly DecimalFormat df1 = new DecimalFormat("0.######");
-		private static readonly DecimalFormat df2 = new DecimalFormat("0.######E0");
+		private readonly string df1 = "0.######";
+		private readonly string df2 = "0.######E0";
 		private double value;
 
 		public BasicDouble(double value)
@@ -24,27 +21,19 @@ namespace com.xxdb.data
 			this.value = value;
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: public BasicDouble(com.xxdb.io.ExtendedDataInput in) throws java.io.IOException
 		public BasicDouble(ExtendedDataInput @in)
 		{
 			value = @in.readDouble();
 		}
 
-		public virtual double Double
+		public virtual double getValue()
 		{
-			get
-			{
-				return value;
-			}
+			return value;
 		}
 
-		public override bool Null
+		public override bool isNull()
 		{
-			get
-			{
-				return value == -double.MaxValue;
-			}
+			return value == -double.MaxValue;
 		}
 
 		public override void setNull()
@@ -52,29 +41,19 @@ namespace com.xxdb.data
 			value = -double.MaxValue;
 		}
 
-		public override DATA_CATEGORY DataCategory
+		public override DATA_CATEGORY getDataCategory()
 		{
-			get
-			{
 				return DATA_CATEGORY.FLOATING;
-			}
 		}
 
-		public override DATA_TYPE DataType
+		public override DATA_TYPE getDataType()
 		{
-			get
-			{
 				return DATA_TYPE.DT_DOUBLE;
-			}
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: public Number getNumber() throws Exception
-		public override Number Number
+		public override object getNumber()
 		{
-			get
-			{
-				if (Null)
+				if (isNull())
 				{
 					return null;
 				}
@@ -82,24 +61,16 @@ namespace com.xxdb.data
 				{
 					return new double?(value);
 				}
-			}
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: @Override public java.time.temporal.Temporal getTemporal() throws Exception
-		public override Temporal Temporal
+		public override object getTemporal()
 		{
-			get
-			{
 				throw new Exception("Imcompatible data type");
-			}
 		}
 
-		public override string String
+		public override string getString()
 		{
-			get
-			{
-				if (Null)
+				if (isNull())
 				{
 					return "";
 				}
@@ -112,14 +83,14 @@ namespace com.xxdb.data
 					double absVal = Math.Abs(value);
 					if ((absVal > 0 && absVal <= 0.000001) || absVal >= 1000000.0)
 					{
-						return df2.format(value);
+						return value.ToString(df2);
 					}
 					else
 					{
-						return df1.format(value);
+						return value.ToString(df1);
 					}
 				}
-			}
+	
 		}
 
 		public override bool Equals(object o)
@@ -139,9 +110,7 @@ namespace com.xxdb.data
 			return (new double?(value)).GetHashCode();
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: protected void writeScalarToOutputStream(com.xxdb.io.ExtendedDataOutput out) throws java.io.IOException
-		protected internal override void WriteScalarToOutputStream(ExtendedDataOutput @out)
+		protected override void writeScalarToOutputStream(ExtendedDataOutput @out)
 		{
 			@out.writeDouble(value);
 		}

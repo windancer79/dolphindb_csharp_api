@@ -222,6 +222,7 @@ namespace dolphindb
                     @out.flush();
 
                     @in = remoteLittleEndian ? (ExtendedDataInput)new LittleEndianDataInputStream(new BufferedStream(new NetworkStream(socket))) : (ExtendedDataInput)new BigEndianDataInputStream(new BufferedStream(new NetworkStream(socket)));
+                    
                     header = @in.readLine();
                 }
                 catch (IOException ex)
@@ -644,24 +645,6 @@ namespace dolphindb
 			}
 		}
 
-        public string connect()
-        {
-            socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            socket.Connect("localhost", 8900);
-            StreamWriter @out = new LittleEndianDataOutputStream(new BufferedStream(new NetworkStream(socket)));
-
-            StreamReader @in = new LittleEndianDataInputStream(new BufferedStream(new NetworkStream(socket)));
-            string body = "connect\n";
-            @out.Write("API 0 ");
-            @out.Write(body.Length.ToString());
-            @out.Write('\n');
-            @out.Write(body);
-            @out.Flush();
-
-
-            string line = @in.ReadLine();
-            return line;
-        }
 	}
 
 }

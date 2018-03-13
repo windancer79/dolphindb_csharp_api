@@ -415,6 +415,7 @@ namespace dolphindb.io
         public abstract void writeInt(int value);
 
         public abstract void writeLong(long value);
-    }
 
+        public abstract void writeShort(short s);
+    }
 }

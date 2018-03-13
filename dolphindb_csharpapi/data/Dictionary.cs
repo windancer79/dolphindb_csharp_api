@@ -1,15 +1,15 @@
-﻿namespace com.xxdb.data
+﻿namespace dolphindb.data
 {
 
 	/*
 	 * Interface for dictionary object
 	 */
 
-	public interface Dictionary : Entity
+	public interface IDictionary : IEntity
 	{
 		DATA_TYPE KeyDataType {get;}
-		Entity get(Scalar key);
-		bool put(Scalar key, Entity value);
+		IEntity get(IScalar key);
+		bool put(IScalar key, IEntity value);
 	}
 
 }

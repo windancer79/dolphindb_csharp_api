@@ -12,7 +12,7 @@ namespace dolphindb.io
 		{
 		}
 
-		public void writeShort(int v)
+		public override void writeShort(short v)
 		{
             write(0xFF & v);
 			write(0xFF & (v >> 8));
