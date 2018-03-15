@@ -8,7 +8,7 @@ using dolphindb.io;
 using System.Text;
 using System.Data;
 
-namespace dolphindb_csharp_api_test
+namespace dolphindb_csharpapi_test
 {
     [TestClass]
     public class DBConnection_test

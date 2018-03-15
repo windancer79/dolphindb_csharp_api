@@ -1,6 +1,4 @@
-﻿using dolphindb.jobjects;
-
-namespace dolphindb.data
+﻿namespace dolphindb.data
 {
 
 	public interface IScalar : IEntity

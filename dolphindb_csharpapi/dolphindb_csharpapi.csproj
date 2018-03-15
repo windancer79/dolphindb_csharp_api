@@ -39,8 +39,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="csjdk\Number.cs" />
-    <Compile Include="csjdk\Temporal.cs" />
     <Compile Include="data\AbstractEntity.cs" />
     <Compile Include="data\AbstractMatrix.cs" />
     <Compile Include="data\AbstractScalar.cs" />
