@@ -1,100 +1,75 @@
-﻿namespace com.xxdb.data
+﻿using dolphindb.io;
+using System;
+
+namespace dolphindb.data
 {
+    public class BasicMinute : BasicInt
+    {
+        private static string format = "HH:mm'm'";
 
+        public BasicMinute(DateTime value) : base(Utils.countMinutes(value))
+        {
+        }
 
-	using ExtendedDataInput = com.xxdb.io.ExtendedDataInput;
+        public BasicMinute(ExtendedDataInput @in) : base(@in)
+        {
+        }
 
-	/// 
-	/// <summary>
-	/// Corresponds to DolphinDB minute scalar
-	/// 
-	/// </summary>
+        protected internal BasicMinute(int value) : base(value)
+        {
+        }
 
-	public class BasicMinute : BasicInt
-	{
-		private static DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm'm'");
+        public override DATA_CATEGORY getDataCategory()
+        {
+            return DATA_CATEGORY.TEMPORAL;
+        }
 
-		public BasicMinute(LocalTime value) : base(Utils.countMinutes(value))
-		{
-		}
+        public override DATA_TYPE getDataType()
+        {
+            return DATA_TYPE.DT_MINUTE;
+        }
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: public BasicMinute(com.xxdb.io.ExtendedDataInput in) throws java.io.IOException
-		public BasicMinute(ExtendedDataInput @in) : base(@in)
-		{
-		}
+        public new DateTime getValue()
+        {
+            if (isNull())
+            {
+                return DateTime.MinValue;
+            }
+            else
+            {
+                return Utils.parseMinute(base.getValue());
+            }
 
-		protected internal BasicMinute(int value) : base(value)
-		{
-		}
+        }
 
-		public override DATA_CATEGORY DataCategory
-		{
-			get
-			{
-				return DATA_CATEGORY.TEMPORAL;
-			}
-		}
+        public override object getTemporal()
+        {
+            return getValue();
+        }
 
-		public override DATA_TYPE DataType
-		{
-			get
-			{
-				return DATA_TYPE.DT_MINUTE;
-			}
-		}
+        public override string getString()
+        {
+            if (isNull())
+            {
+                return "";
+            }
+            else
+            {
+                return this.getValue().ToString(format);
+            }
+        }
 
-		public virtual LocalTime Minute
-		{
-			get
-			{
-				if (Null)
-				{
-					return null;
-				}
-				else
-				{
-					return Utils.parseMinute(Int);
-				}
-			}
-		}
-
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: @Override public java.time.temporal.Temporal getTemporal() throws Exception
-		public override Temporal Temporal
-		{
-			get
-			{
-				return Minute;
-			}
-		}
-
-		public override string String
-		{
-			get
-			{
-				if (Null)
-				{
-					return "";
-				}
-				else
-				{
-					return Minute.format(format);
-				}
-			}
-		}
-
-		public override bool Equals(object o)
-		{
-			if (!(o is BasicMinute) || o == null)
-			{
-				return false;
-			}
-			else
-			{
-				return Int == ((BasicMinute)o).Int;
-			}
-		}
-	}
+        public override bool Equals(object o)
+        {
+            if (!(o is BasicMinute) || o == null)
+            {
+                return false;
+            }
+            else
+            {
+                return base.getValue() == ((BasicInt)o).getValue();
+            }
+        }
+    }
 
 }

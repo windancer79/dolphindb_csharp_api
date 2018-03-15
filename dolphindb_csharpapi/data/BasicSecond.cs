@@ -1,26 +1,17 @@
-﻿namespace com.xxdb.data
+﻿using dolphindb.io;
+using System;
+
+namespace dolphindb.data
 {
-
-
-	using ExtendedDataInput = com.xxdb.io.ExtendedDataInput;
-
-
-	/// 
-	/// <summary>
-	/// Corresponds to DolphinDB second scalar
-	/// 
-	/// </summary>
 
 	public class BasicSecond : BasicInt
 	{
-		private static DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm:ss");
+		private static string format = "HH:mm:ss";
 
-		public BasicSecond(LocalTime value) : base(Utils.countSeconds(value))
+		public BasicSecond(DateTime value) : base(Utils.countSeconds(value))
 		{
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: public BasicSecond(com.xxdb.io.ExtendedDataInput in) throws java.io.IOException
 		public BasicSecond(ExtendedDataInput @in) : base(@in)
 		{
 		}
@@ -29,60 +20,44 @@
 		{
 		}
 
-		public override DATA_CATEGORY DataCategory
+        public override DATA_CATEGORY getDataCategory()
+        {
+            return DATA_CATEGORY.TEMPORAL;
+        }
+
+        public override DATA_TYPE getDataType()
 		{
-			get
-			{
-				return DATA_CATEGORY.TEMPORAL;
-			}
+			return DATA_TYPE.DT_SECOND;
 		}
 
-		public override DATA_TYPE DataType
+		public new DateTime getValue()
 		{
-			get
-			{
-				return DATA_TYPE.DT_SECOND;
-			}
-		}
-
-		public virtual LocalTime Second
-		{
-			get
-			{
-				if (Null)
+				if (isNull())
 				{
-					return null;
+					return DateTime.MinValue;
 				}
 				else
 				{
-					return Utils.parseSecond(Int);
+					return Utils.parseSecond(base.getValue());
 				}
-			}
+
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: @Override public java.time.temporal.Temporal getTemporal() throws Exception
-		public override Temporal Temporal
+		public override object getTemporal()
 		{
-			get
-			{
-				return Second;
-			}
+			return getValue();
 		}
 
-		public override string String
+		public override string getString()
 		{
-			get
-			{
-				if (Null)
+				if (isNull())
 				{
 					return "";
 				}
 				else
 				{
-					return Second.format(format);
+					return this.getValue().ToString(format);
 				}
-			}
 		}
 
 		public override bool Equals(object o)
@@ -93,7 +68,7 @@
 			}
 			else
 			{
-				return Int == ((BasicSecond)o).Int;
+				return base.getValue() == ((BasicInt)o).getValue();
 			}
 		}
 	}

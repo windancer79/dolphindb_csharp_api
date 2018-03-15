@@ -1,17 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace com.xxdb.data
+namespace dolphindb.data
 {
-
-	using ExtendedDataInput = com.xxdb.io.ExtendedDataInput;
-
-
-	/// 
-	/// <summary>
-	/// Corresponds to DolphinDB nanotime matrix.
-	/// 
-	/// </summary>
 
 	public class BasicNanoTimeMatrix : BasicLongMatrix
 	{
@@ -19,14 +10,10 @@ namespace com.xxdb.data
 		{
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: public BasicNanoTimeMatrix(int rows, int columns, java.util.List<long[]> listOfArrays) throws Exception
 		public BasicNanoTimeMatrix(int rows, int columns, IList<long[]> listOfArrays) : base(rows,columns, listOfArrays)
 		{
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: public BasicNanoTimeMatrix(com.xxdb.io.ExtendedDataInput in) throws java.io.IOException
 		public BasicNanoTimeMatrix(ExtendedDataInput @in) : base(@in)
 		{
 		}

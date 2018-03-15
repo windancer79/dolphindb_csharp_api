@@ -1,16 +1,9 @@
-﻿using System;
+﻿using dolphindb.io;
+using System;
 using System.Collections.Generic;
 
-namespace com.xxdb.data
+namespace dolphindb.data
 {
-
-	using ExtendedDataInput = com.xxdb.io.ExtendedDataInput;
-
-	/// 
-	/// <summary>
-	/// Corresponds to DolphinDB time vector
-	/// 
-	/// </summary>
 
 	public class BasicTimeVector : BasicIntVector
 	{
@@ -31,38 +24,30 @@ namespace com.xxdb.data
 		{
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: protected BasicTimeVector(Entity_DATA_FORM df, com.xxdb.io.ExtendedDataInput in) throws java.io.IOException
 		protected internal BasicTimeVector(DATA_FORM df, ExtendedDataInput @in) : base(df, @in)
 		{
 		}
 
-		public override DATA_CATEGORY DataCategory
+		public override DATA_CATEGORY getDataCategory()
 		{
-			get
-			{
-				return DATA_CATEGORY.TEMPORAL;
-			}
+			return DATA_CATEGORY.TEMPORAL;
 		}
 
-		public override DATA_TYPE DataType
+		public override DATA_TYPE getDataType()
 		{
-			get
-			{
-				return DATA_TYPE.DT_TIME;
-			}
+			return DATA_TYPE.DT_TIME;
 		}
 
-		public override Scalar get(int index)
+		public override IScalar get(int index)
 		{
 			return new BasicTime(getInt(index));
 		}
 
-		public virtual LocalTime getTime(int index)
+		public virtual DateTime getTime(int index)
 		{
 			if (isNull(index))
 			{
-				return null;
+				return DateTime.MinValue;
 			}
 			else
 			{
@@ -70,17 +55,14 @@ namespace com.xxdb.data
 			}
 		}
 
-		public virtual void setTime(int index, LocalTime time)
+		public virtual void setTime(int index, DateTime time)
 		{
 			setInt(index, Utils.countMilliseconds(time));
 		}
 
-		public override Type ElementClass
+		public override Type getElementClass()
 		{
-			get
-			{
-				return typeof(BasicTime);
-			}
+			return typeof(BasicTime);
 		}
 	}
 

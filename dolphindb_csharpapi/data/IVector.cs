@@ -7,10 +7,10 @@ namespace dolphindb.data
 	{
 
 		bool isNull(int index);
-		int Null {set;}
+        void setNull(int index);
 		IScalar get(int index);
 		void set(int index, IScalar value);
-		Type ElementClass {get;}
+        Type getElementClass();
 	}
 
 	public static class Vector_Fields

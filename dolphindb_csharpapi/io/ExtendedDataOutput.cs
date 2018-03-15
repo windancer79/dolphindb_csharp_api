@@ -4,6 +4,7 @@
 
 	public interface ExtendedDataOutput
 	{
+        void write(byte[] b);
         void writeShort(short s);
 		void writeString(string str);
         void flush();

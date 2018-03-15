@@ -1,27 +1,16 @@
-﻿using System;
+﻿using dolphindb.io;
+using System;
 
-namespace com.xxdb.data
+namespace dolphindb.data
 {
-
-
-	using ExtendedDataInput = com.xxdb.io.ExtendedDataInput;
-
-	/// 
-	/// <summary>
-	/// Corresponds to DolphinDB date scalar
-	/// 
-	/// </summary>
-
 	public class BasicDate : BasicInt
 	{
-		private static DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+		private static string format = "yyyy.MM.dd";
 
-		public BasicDate(LocalDate value) : base(Utils.countDays(value))
+		public BasicDate(DateTime value) : base(Utils.countDays(value))
 		{
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: public BasicDate(com.xxdb.io.ExtendedDataInput in) throws java.io.IOException
 		public BasicDate(ExtendedDataInput @in) : base(@in)
 		{
 		}
@@ -30,60 +19,43 @@ namespace com.xxdb.data
 		{
 		}
 
-		public override DATA_CATEGORY DataCategory
+		public override DATA_CATEGORY getDataCategory()
 		{
-			get
-			{
-				return DATA_CATEGORY.TEMPORAL;
-			}
+			return DATA_CATEGORY.TEMPORAL;
 		}
 
-		public override DATA_TYPE DataType
+		public override DATA_TYPE getDataType()
 		{
-			get
-			{
-				return DATA_TYPE.DT_DATE;
-			}
+			return DATA_TYPE.DT_DATE;
 		}
 
-		public virtual LocalDate Date
+		public new  DateTime getValue()
 		{
-			get
-			{
-				if (Null)
-				{
-					return null;
-				}
-				else
-				{
-					return Utils.parseDate(Int);
-				}
-			}
+            if (isNull())
+            {
+                return DateTime.MinValue;
+            }
+            else
+            {
+                return Utils.parseDate(base.getValue());
+            }
+        }
+
+		public override object getTemporal()
+		{
+			return getValue();
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: @Override public java.time.temporal.Temporal getTemporal() throws Exception
-		public override Temporal Temporal
+		public override string getString()
 		{
-			get
-			{
-				return DateTime;
-			}
-		}
-
-		public override string String
-		{
-			get
-			{
-				if (Null)
+				if (isNull())
 				{
 					return "";
 				}
 				else
 				{
-					return DateTime.format(format);
+					return getValue().ToString(format);
 				}
-			}
 		}
 
 		public override bool Equals(object o)
@@ -94,7 +66,7 @@ namespace com.xxdb.data
 			}
 			else
 			{
-				return Int == ((BasicDate)o).Int;
+				return base.getValue() == ((BasicInt)o).getValue();
 			}
 		}
 	}

@@ -1,10 +1,4 @@
-﻿//---------------------------------------------------------------------------------------------------------
-//	Copyright © 2007 - 2016 Tangible Software Solutions Inc.
-//	This class can be used by anyone provided that the copyright notice remains intact.
-//
-//	This class is used to replace calls to some Java HashMap or Hashtable methods.
-//---------------------------------------------------------------------------------------------------------
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 internal static class HashMapHelperClass
 {
 	internal static HashSet<KeyValuePair<TKey, TValue>> SetOfKeyValuePairs<TKey, TValue>(this IDictionary<TKey, TValue> dictionary)

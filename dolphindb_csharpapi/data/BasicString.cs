@@ -49,7 +49,7 @@ namespace dolphindb.data
 			return DATA_TYPE.DT_STRING;
 		}
 
-		public override object getNumber()
+		public override Number getNumber()
 		{
 			throw new Exception("Imcompatible data type");
 		}
@@ -86,6 +86,11 @@ namespace dolphindb.data
 		{
 			return value.CompareTo(o.value);
 		}
-	}
+
+        public override string getString()
+        {
+            return value;
+        }
+    }
 
 }

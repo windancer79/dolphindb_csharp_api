@@ -1,19 +1,9 @@
-﻿using System;
+﻿using dolphindb.io;
+using System;
 using System.Collections.Generic;
 
-namespace com.xxdb.data
+namespace dolphindb.data
 {
-
-
-	using ExtendedDataInput = com.xxdb.io.ExtendedDataInput;
-	using ExtendedDataOutput = com.xxdb.io.ExtendedDataOutput;
-
-	/// 
-	/// <summary>
-	/// Corresponds to DolphinDB int vector
-	/// 
-	/// </summary>
-
 	public class BasicIntVector : AbstractVector
 	{
 		private int[] values;
@@ -36,7 +26,7 @@ namespace com.xxdb.data
 
 		public BasicIntVector(int[] array) : base(DATA_FORM.DF_VECTOR)
 		{
-			values = array.Clone();
+			values = array.Clone() as int[];
 		}
 
 		protected internal BasicIntVector(DATA_FORM df, int size) : base(df)
@@ -45,7 +35,7 @@ namespace com.xxdb.data
 		}
 
 //JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: protected BasicIntVector(Entity_DATA_FORM df, com.xxdb.io.ExtendedDataInput in) throws java.io.IOException
+//ORIGINAL LINE: protected BasicIntVector(Entity_DATA_FORM df, dolphindb.io.ExtendedDataInput in) throws java.io.IOException
 		protected internal BasicIntVector(DATA_FORM df, ExtendedDataInput @in) : base(df)
 		{
 			int rows = @in.readInt();
@@ -60,7 +50,7 @@ namespace com.xxdb.data
 			}
 		}
 
-		public override Scalar get(int index)
+		public override IScalar get(int index)
 		{
 			return new BasicInt(values[index]);
 		}
@@ -70,11 +60,9 @@ namespace com.xxdb.data
 			return values[index];
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: public void set(int index, Scalar value) throws Exception
-		public override void set(int index, Scalar value)
+		public override void set(int index, IScalar value)
 		{
-			values[index] = value.Number.intValue();
+			values[index] = Convert.ToInt16(value.getString());
 		}
 
 		public virtual void setInt(int index, int value)
@@ -87,36 +75,24 @@ namespace com.xxdb.data
 			return values[index] == int.MinValue;
 		}
 
-		public override int Null
+		public override void setNull(int index)
 		{
-			set
-			{
-				values[value] = int.MinValue;
-			}
+			values[index] = int.MinValue;
 		}
 
-		public override DATA_CATEGORY DataCategory
+		public override DATA_CATEGORY getDataCategory()
 		{
-			get
-			{
-				return DATA_CATEGORY.INTEGRAL;
-			}
+			return DATA_CATEGORY.INTEGRAL;
 		}
 
-		public override DATA_TYPE DataType
+		public override DATA_TYPE getDataType()
 		{
-			get
-			{
-				return DATA_TYPE.DT_INT;
-			}
+			return DATA_TYPE.DT_INT;
 		}
 
-		public override Type ElementClass
+		public override Type getElementClass()
 		{
-			get
-			{
-				return typeof(BasicInt);
-			}
+			return typeof(BasicInt);
 		}
 
 		public override int rows()
@@ -124,8 +100,6 @@ namespace com.xxdb.data
 			return values.Length;
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: protected void writeVectorToOutputStream(com.xxdb.io.ExtendedDataOutput out) throws java.io.IOException
 		protected internal override void writeVectorToOutputStream(ExtendedDataOutput @out)
 		{
 			@out.writeIntArray(values);

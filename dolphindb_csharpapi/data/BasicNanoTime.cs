@@ -1,24 +1,18 @@
-﻿namespace com.xxdb.data
+﻿using dolphindb.io;
+using System;
+
+namespace dolphindb.data
 {
-
-	using ExtendedDataInput = com.xxdb.io.ExtendedDataInput;
-
-
-	/// <summary>
-	/// Corresponds to DolphinDB nanotime scalar.
-	/// 
-	/// </summary>
 
 	public class BasicNanoTime : BasicLong
 	{
-		private static DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm:ss.SSSSSSSSS");
+		private static string format = "HH:mm:ss.SSSSSSSSS";
 
-		public BasicNanoTime(LocalTime value) : base(Utils.countNanoseconds(value))
+		public BasicNanoTime(DateTime value) : base(Utils.countNanoseconds(value))
 		{
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: public BasicNanoTime(com.xxdb.io.ExtendedDataInput in) throws java.io.IOException
+
 		public BasicNanoTime(ExtendedDataInput @in) : base(@in)
 		{
 		}
@@ -27,73 +21,56 @@
 		{
 		}
 
-		public override DATA_CATEGORY DataCategory
+		public override DATA_CATEGORY getDataCategory()
 		{
-			get
-			{
 				return DATA_CATEGORY.TEMPORAL;
-			}
 		}
 
-		public override DATA_TYPE DataType
+		public override DATA_TYPE getDataType()
 		{
-			get
-			{
-				return DATA_TYPE.DT_NANOTIME;
-			}
+			return DATA_TYPE.DT_NANOTIME;
 		}
 
-		public virtual LocalTime NanoTime
+		public virtual DateTime getValue()
 		{
-			get
-			{
-				if (Null)
+				if (isNull())
 				{
-					return null;
+					return DateTime.MinValue;
 				}
 				else
 				{
-					return Utils.parseNanoTime(Long);
+					return Utils.parseNanoTime(base.getValue());
 				}
-			}
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: @Override public java.time.temporal.Temporal getTemporal() throws Exception
-		public override Temporal Temporal
-		{
-			get
-			{
-				return NanoTime;
-			}
-		}
+        public override object getTemporal()
+        {
+            return getValue();
+        }
 
-		public override string String
-		{
-			get
-			{
-				if (Null)
-				{
-					return "";
-				}
-				else
-				{
-					return NanoTime.format(format);
-				}
-			}
-		}
+        public override string getString()
+        {
+            if (isNull())
+            {
+                return "";
+            }
+            else
+            {
+                return this.getValue().ToString(format);
+            }
+        }
 
-		public override bool Equals(object o)
-		{
-			if (!(o is BasicNanoTime) || o == null)
-			{
-				return false;
-			}
-			else
-			{
-				return Long == ((BasicNanoTime)o).Long;
-			}
-		}
-	}
+        public override bool Equals(object o)
+        {
+            if (!(o is BasicMinute) || o == null)
+            {
+                return false;
+            }
+            else
+            {
+                return base.getValue() == ((BasicLong)o).getValue();
+            }
+        }
+    }
 
 }

@@ -46,15 +46,15 @@ namespace dolphindb.data
         	return DATA_TYPE.DT_INT;
 		}
 
-        public override object getNumber()
+        public override Number getNumber()
 		{
 				if (isNull())
 				{
-					return int.MinValue;
+					return null;
 				}
 				else
 				{
-					return value;
+					return new Number(value);
 				}
 		}
 
@@ -89,6 +89,11 @@ namespace dolphindb.data
 		{
 			return value.CompareTo(o.value);
 		}
-	}
+
+        public override string getString()
+        {
+            return value.ToString();
+        }
+    }
 
 }

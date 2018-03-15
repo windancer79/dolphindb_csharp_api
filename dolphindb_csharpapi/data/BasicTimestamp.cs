@@ -1,27 +1,16 @@
-﻿using System;
+﻿using dolphindb.io;
+using System;
 
-namespace com.xxdb.data
+namespace dolphindb.data
 {
-
-
-	using ExtendedDataInput = com.xxdb.io.ExtendedDataInput;
-
-	/// 
-	/// <summary>
-	/// Corresponds to DolphinDB timestamp scalar
-	/// 
-	/// </summary>
-
 	public class BasicTimestamp : BasicLong
 	{
-		private static DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy.MM.dd'T'HH:mm:ss.SSS");
+		private static string format = "yyyy.MM.dd'T'HH:mm:ss.SSS";
 
 		public BasicTimestamp(DateTime value) : base(Utils.countMilliseconds(value))
 		{
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: public BasicTimestamp(com.xxdb.io.ExtendedDataInput in) throws java.io.IOException
 		public BasicTimestamp(ExtendedDataInput @in) : base(@in)
 		{
 		}
@@ -30,60 +19,43 @@ namespace com.xxdb.data
 		{
 		}
 
-		public override DATA_CATEGORY DataCategory
+        public override DATA_CATEGORY getDataCategory()
+        {
+            return DATA_CATEGORY.TEMPORAL;
+        }
+
+        public override DATA_TYPE getDataType()
 		{
-			get
-			{
-				return DATA_CATEGORY.TEMPORAL;
-			}
+			return DATA_TYPE.DT_TIMESTAMP;
 		}
 
-		public override DATA_TYPE DataType
+		public new DateTime getValue()
 		{
-			get
-			{
-				return DATA_TYPE.DT_TIMESTAMP;
-			}
-		}
-
-		public virtual DateTime Timestamp
-		{
-			get
-			{
-				if (Null)
+				if (isNull())
 				{
-					return null;
+					return DateTime.MinValue;
 				}
 				else
 				{
-					return Utils.parseTimestamp(Long);
+					return Utils.parseTimestamp(base.getValue());
 				}
-			}
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: @Override public java.time.temporal.Temporal getTemporal() throws Exception
-		public override Temporal Temporal
+		public override object getTemporal()
 		{
-			get
-			{
-				return Timestamp;
-			}
+            return this.getValue();
 		}
 
-		public override string String
+		public override string getString()
 		{
-			get
-			{
-				if (Null)
+				if (isNull())
 				{
 					return "";
 				}
 				else
 				{
-					return Timestamp.format(format);
+					return this.getValue().ToString(format);
 				}
-			}
 		}
 
 		public override bool Equals(object o)
@@ -94,7 +66,7 @@ namespace com.xxdb.data
 			}
 			else
 			{
-				return Long == ((BasicTimestamp)o).Long;
+				return base.getValue() == ((BasicLong)o).getValue();
 			}
 		}
 	}

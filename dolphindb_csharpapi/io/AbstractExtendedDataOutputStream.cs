@@ -417,5 +417,10 @@ namespace dolphindb.io
         public abstract void writeLong(long value);
 
         public abstract void writeShort(short s);
+
+        public void write(byte[] b)
+        {
+            write(b,0,b.Length);
+        }
     }
 }

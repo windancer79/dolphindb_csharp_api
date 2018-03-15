@@ -1,37 +1,26 @@
-﻿using System;
+﻿using dolphindb.io;
+using System;
 using System.Text;
 
-namespace com.xxdb.data
+namespace dolphindb.data
 {
-
-	using ExtendedDataInput = com.xxdb.io.ExtendedDataInput;
-	using ExtendedDataOutput = com.xxdb.io.ExtendedDataOutput;
-
-	/// 
-	/// <summary>
-	/// Corresponds to DolphinDB tuple(any vector)
-	/// 
-	/// </summary>
-
 	public class BasicAnyVector : AbstractVector
 	{
-		private Entity[] values;
+		private IEntity[] values;
 
 
 		public BasicAnyVector(int size) : base(DATA_FORM.DF_VECTOR)
 		{
-			values = new Entity[size];
+			values = new IEntity[size];
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: protected BasicAnyVector(com.xxdb.io.ExtendedDataInput in) throws java.io.IOException
 		protected internal BasicAnyVector(ExtendedDataInput @in) : base(DATA_FORM.DF_VECTOR)
 		{
 			int rows = @in.readInt();
 			int cols = @in.readInt();
 			int size = rows * cols;
-			values = new Entity[size];
-			assert(rows <= 1024);
+			values = new IEntity[size];
+
 			BasicEntityFactory factory = new BasicEntityFactory();
 			for (int i = 0; i < size; ++i)
 			{
@@ -42,22 +31,22 @@ namespace com.xxdb.data
 					//assert (form == 1);
 				//if (type != 4)
 					//assert(type == 4);
-				Entity obj = factory.createEntity(Enum.GetValues(typeof(DATA_FORM))[form], Enum.GetValues(typeof(DATA_TYPE))[type], @in);
+				IEntity obj = factory.createEntity((DATA_FORM)form, (DATA_TYPE)type, @in);
 				values[i] = obj;
 			}
 
 		}
 
-		public virtual Entity getEntity(int index)
+		public virtual IEntity getEntity(int index)
 		{
 			return values[index];
 		}
 
-		public override Scalar get(int index)
+		public override IScalar get(int index)
 		{
-			if (values[index].Scalar)
+			if (values[index].isScalar())
 			{
-				return (Scalar)values[index];
+				return (IScalar)values[index];
 			}
 			else
 			{
@@ -65,45 +54,34 @@ namespace com.xxdb.data
 			}
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: public void set(int index, Scalar value) throws Exception
-		public override void set(int index, Scalar value)
+		public override void set(int index, IScalar value)
 		{
 			values[index] = value;
 		}
 
-		public virtual void setEntity(int index, Entity value)
+		public virtual void setEntity(int index, IEntity value)
 		{
 			values[index] = value;
 		}
 
 		public override bool isNull(int index)
 		{
-			return values[index] == null || (values[index].Scalar && ((Scalar)values[index]).Null);
+			return values[index] == null || (values[index].isScalar() && ((IScalar)values[index]).isNull());
 		}
 
-		public override int Null
+		public override void setNull(int index)
 		{
-			set
-			{
-				values[value] = new Void();
-			}
+			values[index] = new Void();
 		}
 
-		public override DATA_CATEGORY DataCategory
+		public override DATA_CATEGORY getDataCategory()
 		{
-			get
-			{
-				return DATA_CATEGORY.MIXED;
-			}
+			return DATA_CATEGORY.MIXED;
 		}
 
-		public override DATA_TYPE DataType
+		public override DATA_TYPE getDataType()
 		{
-			get
-			{
-				return DATA_TYPE.DT_ANY;
-			}
+			return DATA_TYPE.DT_ANY;
 		}
 
 		public override int rows()
@@ -111,20 +89,18 @@ namespace com.xxdb.data
 			return values.Length;
 		}
 
-		public override string String
+		public override string getString()
 		{
-			get
-			{
 				StringBuilder sb = new StringBuilder("(");
 				int size = Math.Min(10, rows());
 				if (size > 0)
 				{
-					sb.Append(getEntity(0).String);
+					sb.Append(getEntity(0).getString());
 				}
 				for (int i = 1; i < size; ++i)
 				{
 					sb.Append(',');
-					sb.Append(getEntity(i).String);
+					sb.Append(getEntity(i).getString());
 				}
 				if (size < rows())
 				{
@@ -132,22 +108,16 @@ namespace com.xxdb.data
 				}
 				sb.Append(")");
 				return sb.ToString();
-			}
 		}
 
-		public override Type ElementClass
+		public override Type getElementClass()
 		{
-			get
-			{
-				return typeof(Entity);
-			}
+				return typeof(IEntity);
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: @Override protected void writeVectorToOutputStream(com.xxdb.io.ExtendedDataOutput out) throws java.io.IOException
 		protected internal override void writeVectorToOutputStream(ExtendedDataOutput @out)
 		{
-			foreach (Entity value in values)
+			foreach (IEntity value in values)
 			{
 				value.write(@out);
 			}

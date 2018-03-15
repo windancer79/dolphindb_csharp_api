@@ -8,7 +8,7 @@ namespace dolphindb.data
         bool isNull(); 
 		void setNull();
 
-        object getNumber();
+        Number getNumber();
         object getTemporal();
 	}
 

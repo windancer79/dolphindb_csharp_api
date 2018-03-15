@@ -1,12 +1,22 @@
 ﻿using System;
+using System.Diagnostics;
 
-namespace com.xxdb.data
+namespace dolphindb.data
 {
 
 
 	public class Utils
 	{
-		public const int DISPLAY_ROWS = 20;
+        private static readonly int DEFALUT_YEAR = 1970;
+        private static readonly int DEFAULT_MONTH = 1;
+        private static readonly int DEFAULT_DAY = 1;
+        private static readonly int DEFAULT_HOUR = 0;
+        private static readonly int DEFAULT_MINUTE = 0;
+        private static readonly int DEFAULT_SECOND = 0;
+        private static readonly int DEFAULT_MILLIONSECOND = 0;
+
+
+        public const int DISPLAY_ROWS = 20;
 		public const int DISPLAY_COLS = 100;
 		public const int DISPLAY_WIDTH = 100;
 
@@ -15,9 +25,9 @@ namespace com.xxdb.data
 		private static readonly int[] monthDays = new int[] {31,28,31,30,31,30,31,31,30,31,30,31};
 		private static readonly int[] leapMonthDays = new int[] {31,29,31,30,31,30,31,31,30,31,30,31};
 
-		public static int countMonths(YearMonth date)
+		public static int countMonths(DateTime date)
 		{
-			return date.Year * 12 + date.MonthValue -1;
+			return date.Year * 12 + date.Month -1;
 		}
 
 		public static int countMonths(int year, int month)
@@ -25,14 +35,14 @@ namespace com.xxdb.data
 			return year * 12 + month - 1;
 		}
 
-		public static YearMonth parseMonth(int value)
+		public static DateTime parseMonth(int value)
 		{
-			return YearMonth.of(value / 12, value % 12 + 1);
+			return new DateTime(value / 12, value % 12 + 1,1);
 		}
 
-		public static int countDays(LocalDate date)
+		public static int countDays(DateTime date)
 		{
-			return countDays(date.Year, date.MonthValue,date.DayOfMonth);
+			return countDays(date.Year, date.Month,date.Day);
 		}
 
 		public static int countDays(int year, int month, int day)
@@ -63,7 +73,7 @@ namespace com.xxdb.data
 			}
 		}
 
-		public static LocalDate parseDate(int days)
+		public static DateTime parseDate(int days)
 		{
 			int year, month, day;
 			bool leap = false;
@@ -115,7 +125,7 @@ namespace com.xxdb.data
 				}
 			}
 
-			return LocalDate.of(year,month,day);
+			return DateTime.Parse(year.ToString() + "." + month.ToString() + "." + day.ToString());
 		}
 
 		public static int countSeconds(DateTime dt)
@@ -132,7 +142,7 @@ namespace com.xxdb.data
 		public static DateTime parseDateTime(int seconds)
 		{
 			int days = seconds / 86400;
-			LocalDate date = Utils.parseDate(days);
+			DateTime date = Utils.parseDate(days);
 			seconds = seconds % 86400;
 			if (seconds < 0)
 			{
@@ -142,23 +152,23 @@ namespace com.xxdb.data
 			seconds = seconds % 3600;
 			int minute = seconds / 60;
 			int second = seconds % 60;
-			return new DateTime(date.Year, date.Month, date.DayOfMonth, hour, minute, second);
+			return new DateTime(date.Year, date.Month, date.Day, hour, minute, second);
 		}
 
-		public static long countMilliseconds(DateTime dt)
+		public static int countMilliseconds(DateTime dt)
 		{
-			long seconds = countSeconds(dt);
-			return seconds * 1000 + dt.Nano / 1000000;
+            int seconds = countSeconds(dt);
+			return seconds * 1000 + dt.Millisecond;
 		}
 
-		public static long countMilliseconds(int year, int month, int day, int hour, int minute, int second, int millisecond)
+		public static int countMilliseconds(int year, int month, int day, int hour, int minute, int second, int millisecond)
 		{
-			return countSeconds(year, month, day, hour, minute, second) * 1000L + millisecond;
+			return countSeconds(year, month, day, hour, minute, second) * 1000 + millisecond;
 		}
-		public static long countNanoseconds(DateTime dt)
+		public static int countNanoseconds(DateTime dt)
 		{
-			long seconds = countSeconds(dt);
-			return seconds * 1000000000L + dt.Nano;
+            int seconds = countSeconds(dt);
+			return seconds * 1000000000 + dt.Millisecond * 1000000;
 		}
 
 		/// <summary>
@@ -170,7 +180,7 @@ namespace com.xxdb.data
 		public static DateTime parseTimestamp(long milliseconds)
 		{
 			int days = (int)Math.Floor(((double)milliseconds / 86400000.0));
-			LocalDate date = Utils.parseDate(days);
+			DateTime date = Utils.parseDate(days);
 
 			milliseconds = milliseconds % 86400000L;
 			if (milliseconds < 0)
@@ -183,7 +193,7 @@ namespace com.xxdb.data
 			seconds = seconds % 3600;
 			int minute = seconds / 60;
 			int second = seconds % 60;
-			return new DateTime(date.Year, date.Month, date.DayOfMonth, hour, minute, second, millisecond * 1000000);
+			return new DateTime(date.Year, date.Month, date.Day, hour, minute, second, millisecond);
 		}
 
 		public const int HOURS_PER_DAY = 24;
@@ -202,57 +212,60 @@ namespace com.xxdb.data
 		/// </summary>
 		public static DateTime parseNanoTimestamp(long nanoseconds)
 		{
-			int days = (int)Math.Floor(((double)nanoseconds / NANOS_PER_DAY));
-			LocalDate date = Utils.parseDate(days);
-			nanoseconds = nanoseconds % NANOS_PER_DAY;
-			if (nanoseconds < 0)
-			{
-				nanoseconds += NANOS_PER_DAY;
-			}
-			LocalTime time = Utils.parseNanoTime(nanoseconds % NANOS_PER_DAY);
-			return new DateTime(date, time);
+            //throw new NotImplementedException();
+            return new DateTime(nanoseconds / 100);
+			//int days = (int)Math.Floor(((double)nanoseconds / NANOS_PER_DAY));
+			//DateTime date = Utils.parseDate(days);
+			//nanoseconds = nanoseconds % NANOS_PER_DAY;
+			//if (nanoseconds < 0)
+			//{
+			//	nanoseconds += NANOS_PER_DAY;
+			//}
+			//DateTime time = Utils.parseNanoTime(nanoseconds % NANOS_PER_DAY);
+			//return new DateTime();
 		}
-		public static int countMilliseconds(LocalTime time)
-		{
-			return countMilliseconds(time.Hour, time.Minute, time.Second, time.Nano / 1000000);
-		}
+		//public static int countMilliseconds(DateTime time)
+		//{
+		//	return countMilliseconds(time.Hour, time.Minute, time.Second, time.Nano / 1000000);
+		//}
 
 		public static int countMilliseconds(int hour, int minute, int second, int millisecond)
 		{
 			return ((hour * 60 + minute) * 60 + second) * 1000 + millisecond;
 		}
 
-		public static long countNanoseconds(LocalTime time)
-		{
-			return (long)countMilliseconds(time.Hour, time.Minute, time.Second, 0) * 1000000 + time.Nano;
-		}
+        //public static long countNanoseconds(DateTime time)
+        //{
+        //	return (long)countMilliseconds(time.Hour, time.Minute, time.Second, 0) * 1000000 + time.Nano;
+        //}
 
-		public static LocalTime parseTime(int milliseconds)
-		{
-			return LocalTime.of(milliseconds / 3600000, milliseconds / 60000 % 60, milliseconds / 1000 % 60, milliseconds % 1000 * 1000000);
-		}
+        public static DateTime parseTime(int milliseconds)
+        {
+            return new DateTime(1970,1,1,milliseconds / 3600000, milliseconds / 60000 % 60, milliseconds / 1000 % 60, milliseconds % 1000);
+        }
 
-		public static LocalTime parseNanoTime(long nanoOfDay)
-		{
-			return LocalTime.ofNanoOfDay(nanoOfDay);
-		}
+        public static DateTime parseNanoTime(long nanoOfDay)
+        {
+            return new DateTime(nanoOfDay);
+        }
 
-		public static int countSeconds(LocalTime time)
-		{
-			return countSeconds(time.Hour, time.Minute, time.Second);
-		}
+        //public static int countSeconds(DateTime time)
+        //{
+        //    return countSeconds(time.Hour, time.Minute, time.Second);
+        //}
 
-		public static int countSeconds(int hour, int minute, int second)
+        public static int countSeconds(int hour, int minute, int second)
 		{
 			return (hour * 60 + minute) * 60 + second;
 		}
 
-		public static LocalTime parseSecond(int seconds)
+		public static DateTime parseSecond(int seconds)
 		{
-			return LocalTime.of(seconds / 3600, seconds % 3600 / 60, seconds % 60);
+            //throw new NotImplementedException();
+			return new DateTime(DEFALUT_YEAR, DEFAULT_MONTH, DEFAULT_DAY,seconds / 3600, seconds % 3600 / 60, seconds % 60);
 		}
 
-		public static int countMinutes(LocalTime time)
+		public static int countMinutes(DateTime time)
 		{
 			return countMinutes(time.Hour, time.Minute);
 		}
@@ -262,9 +275,9 @@ namespace com.xxdb.data
 			return hour * 60 + minute;
 		}
 
-		public static LocalTime parseMinute(int minutes)
+		public static DateTime parseMinute(int minutes)
 		{
-			return LocalTime.of(minutes / 60, minutes % 60);
+		    return new DateTime(DEFALUT_YEAR,DEFAULT_MONTH,DEFAULT_DAY, minutes / 60, minutes % 60,DEFAULT_SECOND);
 		}
 	}
 

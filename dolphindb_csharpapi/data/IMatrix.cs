@@ -3,13 +3,6 @@ using System;
 
 namespace dolphindb.data
 {
-
-	/// 
-	/// <summary>
-	/// Interface for matrix object
-	/// 
-	/// </summary>
-
 	public interface IMatrix : IEntity
 	{
 		bool isNull(int row, int column);
@@ -17,11 +10,11 @@ namespace dolphindb.data
 		IScalar getRowLabel(int row);
         IScalar getColumnLabel(int column);
         IScalar get(int row, int column);
-		IVector RowLabels {get;}
-        IVector ColumnLabels {get;}
+        IVector getRowLabels();
+        IVector getColumnLabels();
 		bool hasRowLabel();
 		bool hasColumnLabel();
-		Type ElementClass {get;}
+        Type getElementClass();
 	}
 
 }

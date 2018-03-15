@@ -50,7 +50,7 @@ namespace dolphindb.data
                 return DATA_TYPE.DT_LONG;
         }
 
-        public override object getNumber()
+        public override Number getNumber()
         {
             if (isNull())
             {
@@ -58,7 +58,7 @@ namespace dolphindb.data
             }
             else
             {
-                return new long?(value);
+                return new Number(value);
             }
         }
 

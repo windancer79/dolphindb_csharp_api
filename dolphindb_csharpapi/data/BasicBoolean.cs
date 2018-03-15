@@ -4,11 +4,6 @@ using System;
 
 namespace dolphindb.data
 {
-	/// 
-	/// <summary>
-	/// Corresponds to DolphinDB bool scalar
-	/// 
-	/// </summary>
 
 	public class BasicBoolean : AbstractScalar, IComparable<BasicBoolean>
 	{
@@ -54,7 +49,7 @@ namespace dolphindb.data
 			return DATA_TYPE.DT_BOOL;
 		}
 
-        public override object getNumber()
+        public override Number getNumber()
 		{
 			
 				if (isNull())
@@ -63,7 +58,7 @@ namespace dolphindb.data
 				}
 				else
 				{
-					return new byte?(value);
+					return new Number(value);
 				}
 		}
 

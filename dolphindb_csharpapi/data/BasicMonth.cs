@@ -1,28 +1,21 @@
-﻿namespace com.xxdb.data
+﻿
+using dolphindb.io;
+using System;
+
+namespace dolphindb.data
 {
-
-
-	using ExtendedDataInput = com.xxdb.io.ExtendedDataInput;
-
-	/// 
-	/// <summary>
-	/// Corresponds to DolphinDB month scalar
-	/// 
-	/// </summary>
 
 	public class BasicMonth : BasicInt
 	{
-		private static DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy.MM'M'");
+		private static string format ="yyyy.MMM";
 
-		public BasicMonth(int year, Month month) : base(year * 12 + month.Value)
+		public BasicMonth(int year, int month) : base(year * 12 + month)
 		{
 		}
-		public BasicMonth(YearMonth value) : base(value.Year * 12 + value.MonthValue - 1)
+		public BasicMonth(DateTime value) : base(value.Year * 12 + value.Month - 1)
 		{
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: public BasicMonth(com.xxdb.io.ExtendedDataInput in) throws java.io.IOException
 		public BasicMonth(ExtendedDataInput @in) : base(@in)
 		{
 		}
@@ -31,60 +24,44 @@
 		{
 		}
 
-		public virtual YearMonth Month
+		public new DateTime getValue()
 		{
-			get
-			{
-				if (Null)
+				if (isNull())
 				{
-					return null;
+					return DateTime.MinValue;
 				}
 				else
 				{
-					return Utils.parseMonth(Int);
+					return Utils.parseMonth(base.getValue());
 				}
-			}
 		}
 
-		public override DATA_CATEGORY DataCategory
+		public override DATA_CATEGORY getDataCategory()
 		{
-			get
-			{
-				return DATA_CATEGORY.TEMPORAL;
-			}
+			return DATA_CATEGORY.TEMPORAL;
 		}
 
-		public override DATA_TYPE DataType
+		public override DATA_TYPE getDataType()
 		{
-			get
-			{
-				return DATA_TYPE.DT_MONTH;
-			}
+			return DATA_TYPE.DT_MONTH;
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: @Override public java.time.temporal.Temporal getTemporal() throws Exception
-		public override Temporal Temporal
+		public override object getTemporal()
 		{
-			get
-			{
-				return Month;
-			}
+			return getValue();
 		}
 
-		public override string String
+		public override string getString()
 		{
-			get
-			{
-				if (Null)
+				if (isNull())
 				{
 					return "";
 				}
 				else
 				{
-					return Month.format(format);
+					return this.getValue().ToString(format);
 				}
-			}
+
 		}
 
 		public override bool Equals(object o)
@@ -95,7 +72,7 @@
 			}
 			else
 			{
-				return Int == ((BasicMonth)o).Int;
+				return base.getValue() == ((BasicInt)o).getValue();
 			}
 		}
 	}

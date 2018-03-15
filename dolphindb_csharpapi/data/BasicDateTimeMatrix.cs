@@ -1,17 +1,9 @@
-﻿using System;
+﻿using dolphindb.io;
+using System;
 using System.Collections.Generic;
 
-namespace com.xxdb.data
+namespace dolphindb.data
 {
-
-
-	using ExtendedDataInput = com.xxdb.io.ExtendedDataInput;
-
-	/// 
-	/// <summary>
-	/// Corresponds to DolphinDB datetime matrix
-	/// 
-	/// </summary>
 
 	public class BasicDateTimeMatrix : BasicIntMatrix
 	{
@@ -19,14 +11,10 @@ namespace com.xxdb.data
 		{
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: public BasicDateTimeMatrix(int rows, int columns, java.util.List<int[]> listOfArrays) throws Exception
 		public BasicDateTimeMatrix(int rows, int columns, IList<int[]> listOfArrays) : base(rows,columns, listOfArrays)
 		{
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: public BasicDateTimeMatrix(com.xxdb.io.ExtendedDataInput in) throws java.io.IOException
 		public BasicDateTimeMatrix(ExtendedDataInput @in) : base(@in)
 		{
 		}
@@ -41,33 +29,24 @@ namespace com.xxdb.data
 			return Utils.parseDateTime(getInt(row, column));
 		}
 
-		public override Scalar get(int row, int column)
+		public override IScalar get(int row, int column)
 		{
 			return new BasicDateTime(getInt(row, column));
 		}
 
-		public override Type ElementClass
+		public override Type getElementClass()
 		{
-			get
-			{
-				return typeof(BasicDateTime);
-			}
+			return typeof(BasicDateTime);
 		}
 
-		public override DATA_CATEGORY DataCategory
+		public override DATA_CATEGORY getDataCategory()
 		{
-			get
-			{
-				return DATA_CATEGORY.TEMPORAL;
-			}
+			return DATA_CATEGORY.TEMPORAL;
 		}
 
-		public override DATA_TYPE DataType
+		public override DATA_TYPE getDataType()
 		{
-			get
-			{
-				return DATA_TYPE.DT_DATETIME;
-			}
+			return DATA_TYPE.DT_DATETIME;
 		}
 	}
 

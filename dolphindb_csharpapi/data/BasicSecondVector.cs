@@ -1,18 +1,9 @@
-﻿using System;
+﻿using dolphindb.io;
+using System;
 using System.Collections.Generic;
 
-namespace com.xxdb.data
+namespace dolphindb.data
 {
-
-
-	using ExtendedDataInput = com.xxdb.io.ExtendedDataInput;
-
-	/// 
-	/// <summary>
-	/// Corresponds to DolphinDB second vector
-	/// 
-	/// </summary>
-
 	public class BasicSecondVector : BasicIntVector
 	{
 
@@ -32,38 +23,30 @@ namespace com.xxdb.data
 		{
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: protected BasicSecondVector(Entity_DATA_FORM df, com.xxdb.io.ExtendedDataInput in) throws java.io.IOException
 		protected internal BasicSecondVector(DATA_FORM df, ExtendedDataInput @in) : base(df, @in)
 		{
 		}
 
-		public override DATA_CATEGORY DataCategory
+		public override DATA_CATEGORY getDataCategory()
 		{
-			get
-			{
-				return DATA_CATEGORY.TEMPORAL;
-			}
+			return DATA_CATEGORY.TEMPORAL;
 		}
 
-		public override DATA_TYPE DataType
+		public override DATA_TYPE getDataType()
 		{
-			get
-			{
-				return DATA_TYPE.DT_SECOND;
-			}
+			return DATA_TYPE.DT_SECOND;
 		}
 
-		public override Scalar get(int index)
+		public override IScalar get(int index)
 		{
 			return new BasicSecond(getInt(index));
 		}
 
-		public virtual LocalTime getSecond(int index)
+		public virtual DateTime getSecond(int index)
 		{
 			if (isNull(index))
 			{
-				return null;
+				return DateTime.MinValue;
 			}
 			else
 			{
@@ -71,17 +54,14 @@ namespace com.xxdb.data
 			}
 		}
 
-		public virtual void setSecond(int index, LocalTime time)
+		public virtual void setSecond(int index, DateTime time)
 		{
 			setInt(index, Utils.countSeconds(time));
 		}
 
-		public override Type ElementClass
+		public override Type getElementClass()
 		{
-			get
-			{
-				return typeof(BasicSecond);
-			}
+			return typeof(BasicSecond);
 		}
 	}
 

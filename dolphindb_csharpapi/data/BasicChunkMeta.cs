@@ -1,27 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 
-namespace com.xxdb.data
+namespace dolphindb.data
 {
-
-
-	using AbstractExtendedDataOutputStream = com.xxdb.io.AbstractExtendedDataOutputStream;
-	using ExtendedDataInput = com.xxdb.io.ExtendedDataInput;
-	using ExtendedDataOutput = com.xxdb.io.ExtendedDataOutput;
-
 	public class BasicChunkMeta : AbstractEntity, Entity
 	{
 		private string path;
 		private sbyte[] id;
 		private int version;
-		//TODO: we may change this field to long type
-//JAVA TO C# CONVERTER NOTE: Fields cannot have the same name as methods:
+
 		private int size_Renamed;
 		private sbyte flag;
 		private IList<string> sites;
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: public BasicChunkMeta(com.xxdb.io.ExtendedDataInput in) throws java.io.IOException
 		public BasicChunkMeta(ExtendedDataInput @in)
 		{
 			@in.readShort(); //skip the length of the data
@@ -167,8 +158,7 @@ namespace com.xxdb.data
 			}
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: @Override public void write(com.xxdb.io.ExtendedDataOutput output) throws java.io.IOException
+
 		public virtual void write(ExtendedDataOutput output)
 		{
 			int length = 27 + AbstractExtendedDataOutputStream.getUTFlength(path, 0, 0) + sites.Count;

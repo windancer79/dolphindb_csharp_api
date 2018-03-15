@@ -1,17 +1,10 @@
-﻿using System;
+﻿using dolphindb.io;
+using System;
 using System.Collections.Generic;
 
-namespace com.xxdb.data
+namespace dolphindb.data
 {
 
-	using ExtendedDataInput = com.xxdb.io.ExtendedDataInput;
-	using ExtendedDataOutput = com.xxdb.io.ExtendedDataOutput;
-
-	/// 
-	/// <summary>
-	/// Corresponds to DolphinDB string matrix
-	/// 
-	/// </summary>
 
 	public class BasicStringMatrix : AbstractMatrix
 	{
@@ -24,8 +17,6 @@ namespace com.xxdb.data
 			isSymbol = true;
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: public BasicStringMatrix(int rows, int columns, java.util.List<String[]> list) throws Exception
 		public BasicStringMatrix(int rows, int columns, IList<string[]> list) : base(rows,columns)
 		{
 			values = new string[rows * columns];
@@ -45,8 +36,6 @@ namespace com.xxdb.data
 			isSymbol = true;
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: public BasicStringMatrix(com.xxdb.io.ExtendedDataInput in) throws java.io.IOException
 		public BasicStringMatrix(ExtendedDataInput @in) : base(@in)
 		{
 			isSymbol = true;
@@ -72,37 +61,26 @@ namespace com.xxdb.data
 			values[getIndex(row, column)] = "";
 		}
 
-		public override Scalar get(int row, int column)
+		public override IScalar get(int row, int column)
 		{
 			return new BasicString(values[getIndex(row, column)]);
 		}
 
-		public override DATA_CATEGORY DataCategory
+		public override DATA_CATEGORY getDataCategory()
 		{
-			get
-			{
-				return DATA_CATEGORY.LITERAL;
-			}
+			return DATA_CATEGORY.LITERAL;
 		}
 
-		public override DATA_TYPE DataType
+		public override DATA_TYPE getDataType()
 		{
-			get
-			{
-				return isSymbol ? DATA_TYPE.DT_SYMBOL : DATA_TYPE.DT_STRING;
-			}
+			return isSymbol ? DATA_TYPE.DT_SYMBOL : DATA_TYPE.DT_STRING;
 		}
 
-		public override Type ElementClass
+		public override Type getElementClass()
 		{
-			get
-			{
-				return typeof(BasicString);
-			}
+			return typeof(BasicString);
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: @Override protected void readMatrixFromInputStream(int rows, int columns, com.xxdb.io.ExtendedDataInput in) throws java.io.IOException
 		protected internal override void readMatrixFromInputStream(int rows, int columns, ExtendedDataInput @in)
 		{
 			int size = rows * columns;
@@ -113,8 +91,6 @@ namespace com.xxdb.data
 			}
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: protected void writeVectorToOutputStream(com.xxdb.io.ExtendedDataOutput out) throws java.io.IOException
 		protected internal override void writeVectorToOutputStream(ExtendedDataOutput @out)
 		{
 			foreach (string value in values)

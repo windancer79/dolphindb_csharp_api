@@ -1,19 +1,9 @@
-﻿using System;
+﻿using dolphindb.io;
+using System;
 using System.Collections.Generic;
 
-namespace com.xxdb.data
+namespace dolphindb.data
 {
-
-
-	using ExtendedDataInput = com.xxdb.io.ExtendedDataInput;
-	using ExtendedDataOutput = com.xxdb.io.ExtendedDataOutput;
-
-	/// 
-	/// <summary>
-	/// Corresponds to DolphinDB double vector
-	/// 
-	/// </summary>
-
 	public class BasicDoubleVector : AbstractVector
 	{
 		private double[] values;
@@ -36,7 +26,7 @@ namespace com.xxdb.data
 
 		public BasicDoubleVector(double[] array) : base(DATA_FORM.DF_VECTOR)
 		{
-			values = array.Clone();
+			values = array.Clone() as double[];
 		}
 
 		protected internal BasicDoubleVector(DATA_FORM df, int size) : base(df)
@@ -44,8 +34,6 @@ namespace com.xxdb.data
 			values = new double[size];
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: protected BasicDoubleVector(Entity_DATA_FORM df, com.xxdb.io.ExtendedDataInput in) throws java.io.IOException
 		protected internal BasicDoubleVector(DATA_FORM df, ExtendedDataInput @in) : base(df)
 		{
 			int rows = @in.readInt();
@@ -58,7 +46,7 @@ namespace com.xxdb.data
 			}
 		}
 
-		public override Scalar get(int index)
+		public override IScalar get(int index)
 		{
 			return new BasicDouble(values[index]);
 		}
@@ -68,11 +56,9 @@ namespace com.xxdb.data
 			return values[index];
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: public void set(int index, Scalar value) throws Exception
-		public override void set(int index, Scalar value)
+		public override void set(int index, IScalar value)
 		{
-			values[index] = value.Number.doubleValue();
+			values[index] = double.Parse(value.ToString());
 		}
 
 		public virtual void setDouble(int index, double value)
@@ -85,36 +71,24 @@ namespace com.xxdb.data
 			return values[index] == -double.MaxValue;
 		}
 
-		public override int Null
+		public override void setNull(int index)
 		{
-			set
-			{
-				values[value] = -double.MaxValue;
-			}
+			values[index] = -double.MaxValue;
 		}
 
-		public override DATA_CATEGORY DataCategory
+		public override DATA_CATEGORY getDataCategory()
 		{
-			get
-			{
-				return DATA_CATEGORY.FLOATING;
-			}
+			return DATA_CATEGORY.FLOATING;
 		}
 
-		public override DATA_TYPE DataType
+		public override DATA_TYPE getDataType()
 		{
-			get
-			{
-				return DATA_TYPE.DT_DOUBLE;
-			}
+			return DATA_TYPE.DT_DOUBLE;
 		}
 
-		public override Type ElementClass
+		public override Type getElementClass()
 		{
-			get
-			{
-				return typeof(BasicDouble);
-			}
+			return typeof(BasicDouble);
 		}
 
 		public override int rows()
@@ -122,8 +96,6 @@ namespace com.xxdb.data
 			return values.Length;
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: protected void writeVectorToOutputStream(com.xxdb.io.ExtendedDataOutput out) throws java.io.IOException
 		protected internal override void writeVectorToOutputStream(ExtendedDataOutput @out)
 		{
 			@out.writeDoubleArray(values);

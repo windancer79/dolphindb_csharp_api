@@ -51,7 +51,7 @@ namespace dolphindb.data
 				return DATA_TYPE.DT_DOUBLE;
 		}
 
-		public override object getNumber()
+		public override Number getNumber()
 		{
 				if (isNull())
 				{
@@ -59,7 +59,7 @@ namespace dolphindb.data
 				}
 				else
 				{
-					return new double?(value);
+					return new Number(value);
 				}
 		}
 

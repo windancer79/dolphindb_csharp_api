@@ -1,25 +1,16 @@
-﻿namespace com.xxdb.data
+﻿using dolphindb.io;
+using System;
+
+namespace dolphindb.data
 {
-
-
-	using ExtendedDataInput = com.xxdb.io.ExtendedDataInput;
-
-	/// 
-	/// <summary>
-	/// Corresponds to DolphinDB time scalar.
-	/// 
-	/// </summary>
-
 	public class BasicTime : BasicInt
 	{
-		private static DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm:ss.SSS");
+		private static string format = "HH:mm:ss.SSS";
 
-		public BasicTime(LocalTime value) : base(Utils.countMilliseconds(value))
+		public BasicTime(DateTime value) : base(Utils.countMilliseconds(value))
 		{
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: public BasicTime(com.xxdb.io.ExtendedDataInput in) throws java.io.IOException
 		public BasicTime(ExtendedDataInput @in) : base(@in)
 		{
 		}
@@ -28,73 +19,56 @@
 		{
 		}
 
-		public override DATA_CATEGORY DataCategory
+		public override DATA_CATEGORY getDataCategory()
 		{
-			get
-			{
-				return DATA_CATEGORY.TEMPORAL;
-			}
+			return DATA_CATEGORY.TEMPORAL;
 		}
 
-		public override DATA_TYPE DataType
+		public override DATA_TYPE getDataType()
 		{
-			get
-			{
-				return DATA_TYPE.DT_TIME;
-			}
+			return DATA_TYPE.DT_TIME;
 		}
 
-		public virtual LocalTime Time
+		public new  DateTime getValue()
 		{
-			get
-			{
-				if (Null)
+				if (isNull())
 				{
-					return null;
+					return DateTime.MinValue;
 				}
 				else
 				{
-					return Utils.parseTime(Int);
+					return Utils.parseTime(base.getValue());
 				}
-			}
-		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: @Override public java.time.temporal.Temporal getTemporal() throws Exception
-		public override Temporal Temporal
-		{
-			get
-			{
-				return Time;
-			}
 		}
+        public override object getTemporal()
+        {
+            return this.getValue();
+        }
 
-		public override string String
-		{
-			get
-			{
-				if (Null)
-				{
-					return "";
-				}
-				else
-				{
-					return Time.format(format);
-				}
-			}
-		}
+        public override string getString()
+        {
+            if (isNull())
+            {
+                return "";
+            }
+            else
+            {
+                return this.getValue().ToString(format);
+            }
+        }
 
-		public override bool Equals(object o)
-		{
-			if (!(o is BasicTime) || o == null)
-			{
-				return false;
-			}
-			else
-			{
-				return Int == ((BasicTime)o).Int;
-			}
-		}
-	}
+        public override bool Equals(object o)
+        {
+            if (!(o is BasicTimestamp) || o == null)
+            {
+                return false;
+            }
+            else
+            {
+                return base.getValue() == ((BasicInt)o).getValue();
+            }
+        }
+    }
 
 }

@@ -1,18 +1,9 @@
-﻿using System;
+﻿using dolphindb.io;
+using System;
 using System.Collections.Generic;
 
-namespace com.xxdb.data
+namespace dolphindb.data
 {
-
-
-	using ExtendedDataInput = com.xxdb.io.ExtendedDataInput;
-	using ExtendedDataOutput = com.xxdb.io.ExtendedDataOutput;
-
-	/// 
-	/// <summary>
-	/// Corresponds to DolphinDB string vector
-	/// 
-	/// </summary>
 
 	public class BasicStringVector : AbstractVector
 	{
@@ -38,7 +29,7 @@ namespace com.xxdb.data
 
 		public BasicStringVector(string[] array) : base(DATA_FORM.DF_VECTOR)
 		{
-			values = array.Clone();
+			values = array.Clone() as string[];
 			this.isSymbol = false;
 		}
 
@@ -48,8 +39,6 @@ namespace com.xxdb.data
 			this.isSymbol = isSymbol;
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: protected BasicStringVector(Entity_DATA_FORM df, com.xxdb.io.ExtendedDataInput in) throws java.io.IOException
 		protected internal BasicStringVector(DATA_FORM df, ExtendedDataInput @in) : base(df)
 		{
 			int rows = @in.readInt();
@@ -62,7 +51,7 @@ namespace com.xxdb.data
 			}
 		}
 
-		public override Scalar get(int index)
+		public override IScalar get(int index)
 		{
 			return new BasicString(values[index]);
 		}
@@ -72,11 +61,9 @@ namespace com.xxdb.data
 			return values[index];
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: public void set(int index, Scalar value) throws Exception
-		public override void set(int index, Scalar value)
+		public override void set(int index, IScalar value)
 		{
-			values[index] = value.String;
+			values[index] = value.ToString();
 		}
 
 		public virtual void setString(int index, string value)
@@ -89,36 +76,24 @@ namespace com.xxdb.data
 			return string.ReferenceEquals(values[index], null) || values[index].Length == 0;
 		}
 
-		public override int Null
+		public override void setNull(int index)
 		{
-			set
-			{
-				values[value] = "";
-			}
+			values[index] = "";
 		}
 
-		public override DATA_CATEGORY DataCategory
+		public override DATA_CATEGORY getDataCategory()
 		{
-			get
-			{
-				return DATA_CATEGORY.LITERAL;
-			}
+			return DATA_CATEGORY.LITERAL;
 		}
 
-		public override DATA_TYPE DataType
+		public override DATA_TYPE getDataType()
 		{
-			get
-			{
-				return isSymbol ? DATA_TYPE.DT_SYMBOL : DATA_TYPE.DT_STRING;
-			}
+			return isSymbol ? DATA_TYPE.DT_SYMBOL : DATA_TYPE.DT_STRING;
 		}
 
-		public override Type ElementClass
+		public override Type getElementClass()
 		{
-			get
-			{
-				return typeof(BasicString);
-			}
+			return typeof(BasicString);
 		}
 
 		public override int rows()
@@ -126,8 +101,6 @@ namespace com.xxdb.data
 			return values.Length;
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: protected void writeVectorToOutputStream(com.xxdb.io.ExtendedDataOutput out) throws java.io.IOException
 		protected internal override void writeVectorToOutputStream(ExtendedDataOutput @out)
 		{
 			foreach (string str in values)

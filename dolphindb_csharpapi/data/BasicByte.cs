@@ -43,10 +43,13 @@ namespace dolphindb.data
 			return DATA_TYPE.DT_BYTE;
 		}
 
-		public override object getNumber()
+		public override Number getNumber()
 		{
-			return new byte?(value);
-		}
+            if (isNull())
+                return null;
+            else
+                return new Number(value);
+        }
 
 
 		public override object getTemporal()

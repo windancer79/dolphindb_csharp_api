@@ -1,15 +1,9 @@
-﻿using System;
+﻿using dolphindb.io;
+using System;
 
-namespace com.xxdb.data
+namespace dolphindb.data
 {
 
-	using ExtendedDataInput = com.xxdb.io.ExtendedDataInput;
-
-	/// 
-	/// <summary>
-	/// Corresponds to DolphinDB chart object
-	/// 
-	/// </summary>
 
 	public class BasicChart : BasicDictionary, Chart
 	{
@@ -17,8 +11,7 @@ namespace com.xxdb.data
 		private static BasicString KEY_DATA = new BasicString("data");
 		private static BasicString KEY_TITLE = new BasicString("title");
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: public BasicChart(com.xxdb.io.ExtendedDataInput in) throws java.io.IOException
+
 		public BasicChart(ExtendedDataInput @in) : base(DATA_TYPE.DT_ANY, @in)
 		{
 		}

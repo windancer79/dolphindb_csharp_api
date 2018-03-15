@@ -1,18 +1,10 @@
-﻿using System;
+﻿using dolphindb.io;
+using System;
 using System.Collections.Generic;
 
-namespace com.xxdb.data
+namespace dolphindb.data
 {
 
-
-	using ExtendedDataInput = com.xxdb.io.ExtendedDataInput;
-
-
-	/// 
-	/// <summary>
-	/// Corresponds to DolphinDB month vector
-	/// 
-	/// </summary>
 
 	public class BasicMonthVector : BasicIntVector
 	{
@@ -33,49 +25,38 @@ namespace com.xxdb.data
 		{
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: protected BasicMonthVector(Entity_DATA_FORM df, com.xxdb.io.ExtendedDataInput in) throws java.io.IOException
 		protected internal BasicMonthVector(DATA_FORM df, ExtendedDataInput @in) : base(df, @in)
 		{
 		}
 
-		public override DATA_CATEGORY DataCategory
+		public override DATA_CATEGORY getDataCategory()
 		{
-			get
-			{
-				return DATA_CATEGORY.TEMPORAL;
-			}
+			return DATA_CATEGORY.TEMPORAL;
 		}
 
-		public override DATA_TYPE DataType
+		public override DATA_TYPE getDataType()
 		{
-			get
-			{
-				return DATA_TYPE.DT_MONTH;
-			}
+			return DATA_TYPE.DT_MONTH;
 		}
 
-		public override Scalar get(int index)
+		public override IScalar get(int index)
 		{
 			return new BasicMonth(getInt(index));
 		}
 
-		public virtual YearMonth getMonth(int index)
+		public virtual DateTime getMonth(int index)
 		{
 			return Utils.parseMonth(getInt(index));
 		}
 
-		public virtual void setMonth(int index, YearMonth month)
+		public virtual void setMonth(int index, DateTime month)
 		{
 			setInt(index, Utils.countMonths(month));
 		}
 
-		public override Type ElementClass
+		public override Type getElementClass()
 		{
-			get
-			{
-				return typeof(YearMonth);
-			}
+			return typeof(DateTime);
 		}
 
 	}

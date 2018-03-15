@@ -1,59 +1,53 @@
-﻿using System;
+﻿using dolphindb.io;
+using System;
+using System.IO;
 using System.Text;
 
-namespace com.xxdb.data
+namespace dolphindb.data
 {
 
-	using ExtendedDataInput = com.xxdb.io.ExtendedDataInput;
-	using ExtendedDataOutput = com.xxdb.io.ExtendedDataOutput;
-
-	public abstract class AbstractMatrix : AbstractEntity, Matrix
+	public abstract class AbstractMatrix : AbstractEntity, IMatrix
 	{
-		public abstract DATA_TYPE DataType {get;}
-		public abstract DATA_CATEGORY DataCategory {get;}
-		public abstract Type ElementClass {get;}
-		public abstract Scalar get(int row, int column);
+        public abstract DATA_TYPE getDataType();
+        public abstract DATA_CATEGORY getDataCategory();
+        public abstract Type getElementClass();
+		public abstract IScalar get(int row, int column);
 		public abstract void setNull(int row, int column);
 		public abstract bool isNull(int row, int column);
-		private Vector rowLabels = null;
-		private Vector columnLabels = null;
-//JAVA TO C# CONVERTER NOTE: Fields cannot have the same name as methods:
-		protected internal int rows_Renamed;
-//JAVA TO C# CONVERTER NOTE: Fields cannot have the same name as methods:
-		protected internal int columns_Renamed;
+		private IVector rowLabels = null;
+		private IVector columnLabels = null;
+		protected int _rows;
+		protected int _columns;
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: protected abstract void readMatrixFromInputStream(int rows, int columns, com.xxdb.io.ExtendedDataInput in) throws java.io.IOException;
 		protected internal abstract void readMatrixFromInputStream(int rows, int columns, ExtendedDataInput @in);
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: protected abstract void writeVectorToOutputStream(com.xxdb.io.ExtendedDataOutput out) throws java.io.IOException;
-		protected internal abstract void writeVectorToOutputStream(ExtendedDataOutput @out);
+
+        protected internal abstract void writeVectorToOutputStream(ExtendedDataOutput @out);
 
 		protected internal AbstractMatrix(int rows, int columns)
 		{
-			this.rows_Renamed = rows;
-			this.columns_Renamed = columns;
+			this._rows = rows;
+			this._columns = columns;
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: protected AbstractMatrix(com.xxdb.io.ExtendedDataInput in) throws java.io.IOException
 		protected internal AbstractMatrix(ExtendedDataInput @in)
 		{
 			byte hasLabels = @in.readByte();
 
 			BasicEntityFactory factory = null;
-			DATA_TYPE[] types = Enum.GetValues(typeof(DATA_TYPE));
+			DATA_TYPE[] types = Enum.GetValues(typeof(DATA_TYPE)) as DATA_TYPE[];
 			if (hasLabels > 0)
 			{
 				factory = new BasicEntityFactory();
 			}
-
-			if ((hasLabels & 1) == 1)
+            short flag;
+            int form;
+            int type;
+            if ((hasLabels & 1) == 1)
 			{
 				//contain row labels
-				short flag = @in.readShort();
-				int form = flag >> 8;
-				int type = flag & 0xff;
+				 flag = @in.readShort();
+				 form = flag >> 8;
+				 type = flag & 0xff;
 				if (form != (int)DATA_FORM.DF_VECTOR)
 				{
 					throw new IOException("The form of matrix row labels must be vector");
@@ -62,15 +56,15 @@ namespace com.xxdb.data
 				{
 					throw new IOException("Invalid data type for matrix row labels: " + type);
 				}
-				rowLabels = (Vector)factory.createEntity(DATA_FORM.DF_VECTOR, types[type], @in);
+				rowLabels = (IVector)factory.createEntity(DATA_FORM.DF_VECTOR, types[type], @in);
 			}
 
-			if ((hasLabels & 2) == 2)
+            if ((hasLabels & 2) == 2)
 			{
 				//contain columns labels
-				short flag = @in.readShort();
-				int form = flag >> 8;
-				int type = flag & 0xff;
+				flag = @in.readShort();
+				form = flag >> 8;
+				type = flag & 0xff;
 				if (form != (int)DATA_FORM.DF_VECTOR)
 				{
 					throw new IOException("The form of matrix columns labels must be vector");
@@ -79,23 +73,23 @@ namespace com.xxdb.data
 				{
 					throw new IOException("Invalid data type for matrix column labels: " + type);
 				}
-				columnLabels = (Vector)factory.createEntity(DATA_FORM.DF_VECTOR, types[type], @in);
+				columnLabels = (IVector)factory.createEntity(DATA_FORM.DF_VECTOR, types[type], @in);
 			}
 
-			short flag = @in.readShort();
-			int type = flag & 0xff;
+			flag = @in.readShort();
+			type = flag & 0xff;
 			if (type < 0 || type >= types.Length)
 			{
 				throw new IOException("Invalid data type for matrix: " + type);
 			}
-			rows_Renamed = @in.readInt();
-			columns_Renamed = @in.readInt();
-			readMatrixFromInputStream(rows_Renamed, columns_Renamed, @in);
+			_rows = @in.readInt();
+			_columns = @in.readInt();
+			readMatrixFromInputStream(_rows, _columns, @in);
 		}
 
 		protected internal virtual int getIndex(int row, int column)
 		{
-			return column * rows_Renamed + row;
+			return column * _rows + row;
 		}
 
 		public virtual bool hasRowLabel()
@@ -108,55 +102,47 @@ namespace com.xxdb.data
 			return columnLabels != null;
 		}
 
-		public virtual Scalar getRowLabel(int index)
+		public virtual IScalar getRowLabel(int index)
 		{
 			return rowLabels.get(index);
 		}
 
-		public virtual Scalar getColumnLabel(int index)
+		public virtual IScalar getColumnLabel(int index)
 		{
 			return columnLabels.get(index);
 		}
 
-		public virtual Vector RowLabels
-		{
-			get
-			{
+		public virtual IVector getRowLabels()
+        {
 				return rowLabels;
-			}
-			set
-			{
-				if (value.rows() != rows_Renamed)
+        }
+        public virtual void setRowLabels(IVector vector)
+        {
+				if (vector.rows() != _rows)
 				{
 					throw new System.ArgumentException("the row label size doesn't equal to the row number of the matrix.");
 				}
-				rowLabels = value;
-			}
+				rowLabels = vector;
 		}
 
 
-		public virtual Vector ColumnLabels
+		public virtual IVector getColumnLabels()
 		{
-			get
-			{
-				return columnLabels;
-			}
-			set
-			{
-				if (value.rows() != columns_Renamed)
-				{
-					throw new System.ArgumentException("the column label size doesn't equal to the column number of the matrix.");
-				}
-				columnLabels = value;
-			}
+			return columnLabels;
 		}
 
-
-		public virtual string String
-		{
-			get
+        public virtual void setColumnLabels(IVector vector)
+        {
+			if (vector.rows() != _columns)
 			{
-				int rows = Math.Min(Utils.DISPLAY_ROWS,rows());
+				throw new System.ArgumentException("the column label size doesn't equal to the column number of the matrix.");
+			}
+			columnLabels = vector;
+		}
+
+		public virtual string getString()
+		{
+				int rows = Math.Min(Utils.DISPLAY_ROWS,this.rows());
 				int limitColMaxWidth = 25;
 				int length = 0;
 				int curCol = 0;
@@ -212,7 +198,7 @@ namespace com.xxdb.data
     
 				while (length < Utils.DISPLAY_WIDTH && curCol < columns())
 				{
-					listTmp[0] = columnLabels == null ?"#" + curCol : columnLabels.get(curCol).String;
+					listTmp[0] = columnLabels == null ?"#" + curCol : columnLabels.get(curCol).getString();
 					maxColWidth = 0;
 					for (i = 0;i < rows;i++)
 					{
@@ -267,7 +253,7 @@ namespace com.xxdb.data
 					curCol++;
 				}
     
-				if (curCol < columns_Renamed)
+				if (curCol < _columns)
 				{
 					for (i = 0;i <= rows;i++)
 					{
@@ -281,39 +267,34 @@ namespace com.xxdb.data
 					resultStr.Append(list[i]);
 					resultStr.Append("\n");
 				}
-				if (rows < rows())
+				if (rows < this.rows())
 				{
 					resultStr.Append("...\n");
 				}
 				return resultStr.ToString();
-			}
+
 		}
 
-		public override DATA_FORM DataForm
+		public override DATA_FORM getDataForm()
 		{
-			get
-			{
-				return DATA_FORM.DF_MATRIX;
-			}
+			return DATA_FORM.DF_MATRIX;
 		}
 
 		public virtual int rows()
 		{
-			return rows_Renamed;
+			return _rows;
 		}
 
 		public virtual int columns()
 		{
-			return columns_Renamed;
+			return _columns;
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: public void write(com.xxdb.io.ExtendedDataOutput out) throws java.io.IOException
 		public virtual void write(ExtendedDataOutput @out)
 		{
-			int flag = ((int)DATA_FORM.DF_MATRIX << 8) + DataType.ordinal();
-			@out.writeShort(flag);
-			sbyte labelFlag = (sbyte)((hasRowLabel() ? 1 : 0) + (hasColumnLabel() ? 2 : 0));
+			int flag = ((int)DATA_FORM.DF_MATRIX << 8) + (int)getDataType();
+			@out.writeShort((short)flag);
+			byte labelFlag = (byte)((hasRowLabel() ? 1 : 0) + (hasColumnLabel() ? 2 : 0));
 			@out.writeByte(labelFlag);
 			if (hasRowLabel())
 			{
@@ -323,7 +304,7 @@ namespace com.xxdb.data
 			{
 				columnLabels.write(@out);
 			}
-			@out.writeShort(flag);
+			@out.writeShort((short)flag);
 			@out.writeInt(rows());
 			@out.writeInt(columns());
 			writeVectorToOutputStream(@out);

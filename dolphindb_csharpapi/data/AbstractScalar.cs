@@ -44,7 +44,7 @@
             throw new NotImplementedException();
         }
 
-        public virtual object getNumber()
+        public virtual Number getNumber()
         {
             throw new NotImplementedException();
         }
@@ -64,9 +64,6 @@
             throw new NotImplementedException();
         }
 
-        public virtual string getString()
-        {
-            throw new NotImplementedException();
-        }
+        public abstract string getString();
     }
 }

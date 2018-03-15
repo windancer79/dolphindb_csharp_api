@@ -1,18 +1,9 @@
-﻿using System;
+﻿using dolphindb.io;
+using System;
 using System.Collections.Generic;
 
-namespace com.xxdb.data
+namespace dolphindb.data
 {
-
-
-	using ExtendedDataInput = com.xxdb.io.ExtendedDataInput;
-
-	/// 
-	/// <summary>
-	/// Corresponds to DolphinDB date vector
-	/// 
-	/// </summary>
-
 	public class BasicDateVector : BasicIntVector
 	{
 
@@ -32,38 +23,30 @@ namespace com.xxdb.data
 		{
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: protected BasicDateVector(Entity_DATA_FORM df, com.xxdb.io.ExtendedDataInput in) throws java.io.IOException
 		protected internal BasicDateVector(DATA_FORM df, ExtendedDataInput @in) : base(df, @in)
 		{
 		}
 
-		public override DATA_CATEGORY DataCategory
+		public override DATA_CATEGORY getDataCategory()
 		{
-			get
-			{
-				return DATA_CATEGORY.TEMPORAL;
-			}
+			return DATA_CATEGORY.TEMPORAL;
 		}
 
-		public override DATA_TYPE DataType
+		public override DATA_TYPE getDataType()
 		{
-			get
-			{
-				return DATA_TYPE.DT_DATE;
-			}
+			return DATA_TYPE.DT_DATE;
 		}
 
-		public override Scalar get(int index)
+		public override IScalar get(int index)
 		{
 			return new BasicDate(getInt(index));
 		}
 
-		public virtual LocalDate getDate(int index)
+		public virtual DateTime getDate(int index)
 		{
 			if (isNull(index))
 			{
-				return null;
+				return DateTime.MinValue;
 			}
 			else
 			{
@@ -71,17 +54,14 @@ namespace com.xxdb.data
 			}
 		}
 
-		public virtual void setDate(int index, LocalDate date)
+		public virtual void setDate(int index, DateTime date)
 		{
 			setInt(index,Utils.countDays(date));
 		}
 
-		public override Type ElementClass
+		public override Type getElementClass()
 		{
-			get
-			{
-				return typeof(BasicDate);
-			}
+			return typeof(BasicDate);
 		}
 	}
 

@@ -148,7 +148,7 @@ namespace dolphindb.io
 
         public string readString()
         {
-            return base.ReadString();
+            return readUTF8((byte)0);
         }
     }
     

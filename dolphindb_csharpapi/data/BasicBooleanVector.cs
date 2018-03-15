@@ -1,32 +1,24 @@
-﻿using System;
+﻿using dolphindb.io;
+using System;
 using System.Collections.Generic;
 
-namespace com.xxdb.data
+namespace dolphindb.data
 {
 
 
-	using ExtendedDataInput = com.xxdb.io.ExtendedDataInput;
-	using ExtendedDataOutput = com.xxdb.io.ExtendedDataOutput;
-
-	/// 
-	/// <summary>
-	/// Corresponds to DolphinDB bool vector
-	/// 
-	/// </summary>
-
 	public class BasicBooleanVector : AbstractVector
 	{
-		private sbyte[] values;
+		private byte[] values;
 
 		public BasicBooleanVector(int size) : this(DATA_FORM.DF_VECTOR, size)
 		{
 		}
 
-		public BasicBooleanVector(IList<sbyte?> list) : base(DATA_FORM.DF_VECTOR)
+		public BasicBooleanVector(IList<byte?> list) : base(DATA_FORM.DF_VECTOR)
 		{
 			if (list != null)
 			{
-				values = new sbyte[list.Count];
+				values = new byte[list.Count];
 				for (int i = 0; i < list.Count; ++i)
 				{
 					values[i] = list[i].Value;
@@ -34,31 +26,29 @@ namespace com.xxdb.data
 			}
 		}
 
-		public BasicBooleanVector(sbyte[] array) : base(DATA_FORM.DF_VECTOR)
+		public BasicBooleanVector(byte[] array) : base(DATA_FORM.DF_VECTOR)
 		{
-			values = array.Clone();
+			values = array.Clone() as byte[];
 		}
 
 		protected internal BasicBooleanVector(DATA_FORM df, int size) : base(df)
 		{
-			values = new sbyte[size];
+			values = new byte[size];
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: protected BasicBooleanVector(Entity_DATA_FORM df, com.xxdb.io.ExtendedDataInput in) throws java.io.IOException
 		protected internal BasicBooleanVector(DATA_FORM df, ExtendedDataInput @in) : base(df)
 		{
 			int rows = @in.readInt();
 			int cols = @in.readInt();
 			int size = rows * cols;
-			values = new sbyte[size];
+			values = new byte[size];
 			for (int i = 0; i < size; ++i)
 			{
 				values[i] = @in.readByte();
 			}
 		}
 
-		public override Scalar get(int index)
+		public override IScalar get(int index)
 		{
 			return new BasicBoolean(values[index]);
 		}
@@ -68,53 +58,39 @@ namespace com.xxdb.data
 			return values[index] != 0;
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: public void set(int index, Scalar value) throws Exception
-		public override void set(int index, Scalar value)
+		public override void set(int index, IScalar value)
 		{
-			values[index] = value.Number.byteValue();
+			values[index] = value.getNumber().byteValue();
 		}
 
 		public virtual void setBoolean(int index, bool value)
 		{
-			values[index] = value ? (sbyte)1 : (sbyte)0;
+			values[index] = value ? (byte)1 : (byte)0;
 		}
 
 		public override bool isNull(int index)
 		{
-			return values[index] == sbyte.MinValue;
+			return values[index] == byte.MinValue;
 		}
 
-		public override int Null
+		public override void setNull(int index)
 		{
-			set
-			{
-				values[value] = sbyte.MinValue;
-			}
+			values[index] = byte.MinValue;
 		}
 
-		public override DATA_CATEGORY DataCategory
+		public override DATA_CATEGORY getDataCategory()
 		{
-			get
-			{
-				return DATA_CATEGORY.LOGICAL;
-			}
+			return DATA_CATEGORY.LOGICAL;
 		}
 
-		public override DATA_TYPE DataType
+		public override DATA_TYPE getDataType()
 		{
-			get
-			{
-				return DATA_TYPE.DT_BOOL;
-			}
+			return DATA_TYPE.DT_BOOL;
 		}
 
-		public override Type ElementClass
+		public override Type getElementClass()
 		{
-			get
-			{
-				return typeof(BasicBoolean);
-			}
+			return typeof(BasicBoolean);
 		}
 
 		public override int rows()
@@ -122,8 +98,6 @@ namespace com.xxdb.data
 			return values.Length;
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: protected void writeVectorToOutputStream(com.xxdb.io.ExtendedDataOutput out) throws java.io.IOException
 		protected internal override void writeVectorToOutputStream(ExtendedDataOutput @out)
 		{
 			@out.write(values);

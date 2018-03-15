@@ -1,18 +1,9 @@
-﻿using System;
+﻿using dolphindb.io;
+using System;
 using System.Collections.Generic;
 
-namespace com.xxdb.data
+namespace dolphindb.data
 {
-
-
-	using ExtendedDataInput = com.xxdb.io.ExtendedDataInput;
-	using ExtendedDataOutput = com.xxdb.io.ExtendedDataOutput;
-
-	/// 
-	/// <summary>
-	/// Corresponds to DolphinDB short vector
-	/// 
-	/// </summary>
 
 	public class BasicShortVector : AbstractVector
 	{
@@ -36,7 +27,7 @@ namespace com.xxdb.data
 
 		public BasicShortVector(short[] array) : base(DATA_FORM.DF_VECTOR)
 		{
-			values = array.Clone();
+			values = array.Clone() as short[];
 		}
 
 		protected internal BasicShortVector(DATA_FORM df, int size) : base(df)
@@ -44,8 +35,6 @@ namespace com.xxdb.data
 			values = new short[size];
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: protected BasicShortVector(Entity_DATA_FORM df, com.xxdb.io.ExtendedDataInput in) throws java.io.IOException
 		protected internal BasicShortVector(DATA_FORM df, ExtendedDataInput @in) : base(df)
 		{
 			int rows = @in.readInt();
@@ -63,16 +52,14 @@ namespace com.xxdb.data
 			return values[index];
 		}
 
-		public override Scalar get(int index)
+		public override IScalar get(int index)
 		{
 			return new BasicShort(values[index]);
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: public void set(int index, Scalar value) throws Exception
-		public override void set(int index, Scalar value)
+		public override void set(int index, IScalar value)
 		{
-			values[index] = value.Number.shortValue();
+			values[index] = short.Parse(value.ToString());
 		}
 
 		public virtual void setShort(int index, short value)
@@ -85,28 +72,19 @@ namespace com.xxdb.data
 			return values[index] == short.MinValue;
 		}
 
-		public override int Null
+		public override void setNull(int index)
 		{
-			set
-			{
-				values[value] = short.MinValue;
-			}
+			values[index] = short.MinValue;
 		}
 
-		public override DATA_CATEGORY DataCategory
+		public override DATA_CATEGORY getDataCategory()
 		{
-			get
-			{
-				return DATA_CATEGORY.INTEGRAL;
-			}
+			return DATA_CATEGORY.INTEGRAL;
 		}
 
-		public override DATA_TYPE DataType
+		public override DATA_TYPE getDataType()
 		{
-			get
-			{
-				return DATA_TYPE.DT_SHORT;
-			}
+			return DATA_TYPE.DT_SHORT;
 		}
 
 		public override int rows()
@@ -114,16 +92,11 @@ namespace com.xxdb.data
 			return values.Length;
 		}
 
-		public override Type ElementClass
+		public override Type getElementClass()
 		{
-			get
-			{
-				return typeof(BasicShort);
-			}
+			return typeof(BasicShort);
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: @Override protected void writeVectorToOutputStream(com.xxdb.io.ExtendedDataOutput out) throws java.io.IOException
 		protected internal override void writeVectorToOutputStream(ExtendedDataOutput @out)
 		{
 			@out.writeShortArray(values);

@@ -1,75 +1,53 @@
-﻿using System;
+﻿using dolphindb.io;
+using System;
 using System.Collections.Generic;
 
-namespace com.xxdb.data
+namespace dolphindb.data
 {
+    public class BasicSecondMatrix : BasicIntMatrix
+    {
+        public BasicSecondMatrix(int rows, int columns) : base(rows, columns)
+        {
+        }
 
+        public BasicSecondMatrix(int rows, int columns, IList<int[]> listOfArrays) : base(rows, columns, listOfArrays)
+        {
+        }
 
-	using ExtendedDataInput = com.xxdb.io.ExtendedDataInput;
+        public BasicSecondMatrix(ExtendedDataInput @in) : base(@in)
+        {
+        }
 
+        public virtual void setSecond(int row, int column, DateTime value)
+        {
+            setInt(row, column, Utils.countSeconds(value));
+        }
 
-	/// 
-	/// <summary>
-	/// Corresponds to DolphinDB second matrix
-	/// 
-	/// </summary>
+        public virtual DateTime getSecond(int row, int column)
+        {
+            return Utils.parseSecond(getInt(row, column));
+        }
 
-	public class BasicSecondMatrix : BasicIntMatrix
-	{
-		public BasicSecondMatrix(int rows, int columns) : base(rows, columns)
-		{
-		}
+        public override IScalar get(int row, int column)
+        {
+            return new BasicSecond(getInt(row, column));
+        }
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: public BasicSecondMatrix(int rows, int columns, java.util.List<int[]> listOfArrays) throws Exception
-		public BasicSecondMatrix(int rows, int columns, IList<int[]> listOfArrays) : base(rows,columns, listOfArrays)
-		{
-		}
+        public override DATA_CATEGORY getDataCategory()
+        {
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: public BasicSecondMatrix(com.xxdb.io.ExtendedDataInput in) throws java.io.IOException
-		public BasicSecondMatrix(ExtendedDataInput @in) : base(@in)
-		{
-		}
+            return DATA_CATEGORY.TEMPORAL;
+        }
 
-		public virtual void setSecond(int row, int column, LocalTime value)
-		{
-			setInt(row, column, Utils.countSeconds(value));
-		}
+        public override DATA_TYPE getDataType()
+        {
+            return DATA_TYPE.DT_SECOND;
+        }
 
-		public virtual LocalTime getSecond(int row, int column)
-		{
-			return Utils.parseSecond(getInt(row, column));
-		}
-
-		public override Scalar get(int row, int column)
-		{
-			return new BasicSecond(getInt(row, column));
-		}
-
-		public override DATA_CATEGORY DataCategory
-		{
-			get
-			{
-				return DATA_CATEGORY.TEMPORAL;
-			}
-		}
-
-		public override DATA_TYPE DataType
-		{
-			get
-			{
-				return DATA_TYPE.DT_SECOND;
-			}
-		}
-
-		public override Type ElementClass
-		{
-			get
-			{
-				return typeof(BasicSecond);
-			}
-		}
-	}
+        public override Type getElementClass()
+        {
+            return typeof(BasicSecond);
+        }
+    }
 
 }

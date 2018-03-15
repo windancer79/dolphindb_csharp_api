@@ -2,27 +2,16 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace com.xxdb.data
+namespace dolphindb.data
 {
-
-
-	using ExtendedDataInput = com.xxdb.io.ExtendedDataInput;
-	using ExtendedDataOutput = com.xxdb.io.ExtendedDataOutput;
-
-	/// 
-	/// <summary>
-	/// Corresponds to DolphinDB dictionary object
-	/// 
-	/// </summary>
-
+    
 	public class BasicDictionary : AbstractEntity, Dictionary
 	{
 		private IDictionary<Scalar, Entity> dict;
 		private DATA_TYPE keyType;
 		private DATA_TYPE valueType;
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: public BasicDictionary(Entity_DATA_TYPE valueType, com.xxdb.io.ExtendedDataInput in) throws java.io.IOException
+
 		public BasicDictionary(DATA_TYPE valueType, ExtendedDataInput @in)
 		{
 			this.valueType = valueType;
@@ -207,7 +196,7 @@ namespace com.xxdb.data
 						content.Append("\n");
 						++count;
 					}
-	//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
+	                //todo: Java iterators are only converted within the context of 'while' and 'for' loops:
 					if (it.hasNext())
 					{
 						content.Append("...\n");
@@ -220,11 +209,11 @@ namespace com.xxdb.data
 					StringBuilder sbValues = new StringBuilder("{");
 					ISet<KeyValuePair<Scalar, Entity>> entries = dict.SetOfKeyValuePairs();
 					ISet<KeyValuePair<Scalar, Entity>>.Enumerator it = entries.GetEnumerator();
-	//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-					if (it.hasNext())
+                    //todo: Java iterators are only converted within the context of 'while' and 'for' loops:
+                    if (it.hasNext())
 					{
-	//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-						KeyValuePair<Scalar, Entity> entry = it.next();
+                        //todo: Java iterators are only converted within the context of 'while' and 'for' loops:
+                        KeyValuePair<Scalar, Entity> entry = it.next();
 						sbKeys.Append(entry.Key.String);
 						sbValues.Append(entry.Value.String);
 					}
@@ -238,8 +227,8 @@ namespace com.xxdb.data
 						sbValues.Append(entry.Value.String);
 						++count;
 					}
-	//JAVA TO C# CONVERTER TODO TASK: Java iterators are only converted within the context of 'while' and 'for' loops:
-					if (it.hasNext())
+                    //todo: Java iterators are only converted within the context of 'while' and 'for' loops:
+                    if (it.hasNext())
 					{
 						sbKeys.Append("...");
 						sbValues.Append("...");
@@ -251,8 +240,6 @@ namespace com.xxdb.data
 			}
 		}
 
-//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
-//ORIGINAL LINE: public void write(com.xxdb.io.ExtendedDataOutput out) throws java.io.IOException
 		public virtual void write(ExtendedDataOutput @out)
 		{
 			if (valueType == DATA_TYPE.DT_DICTIONARY)
